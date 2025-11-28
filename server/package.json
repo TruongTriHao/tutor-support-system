@@ -1,0 +1,21 @@
+{
+  "name": "tutor-mock-server",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "dev": "node index.js",
+    "start": "node index.js",
+    "test": "vitest --globals --run"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "supertest": "^6.3.3",
+    "vitest": "^1.5.12"
+  }
+}

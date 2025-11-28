@@ -1,0 +1,5 @@
+CS251 Lecture Notes
+
+1. Algorithmic paradigms
+2. Complexity
+3. Examples
