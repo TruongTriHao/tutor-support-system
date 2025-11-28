@@ -1,4 +1,4 @@
-const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:4000/api'
+const API_BASE = 'http://localhost:4000/api'
 
 async function request(path:string, opts:any={}){
   const url = path.startsWith('/') ? `${API_BASE}${path}` : `${API_BASE}/${path}`
