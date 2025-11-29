@@ -1,4 +1,3 @@
-import React from 'react'
 import { Routes, Route, Link, Navigate } from 'react-router-dom'
 import Login from './pages/Login'
 import TutorsList from './pages/TutorsList'
@@ -7,7 +6,7 @@ import StudentDashboard from './pages/StudentDashboard'
 import SessionPage from './pages/SessionPage'
 import ResourceList from './pages/ResourceList'
 import ResourceDetail from './pages/ResourceDetail'
-import NotificationCenter from './components/NotificationCenter'
+import NavigationBar from './components/NavigationBar'
 
 function requireAuth(){
   return !!localStorage.getItem('token');
@@ -16,15 +15,7 @@ function requireAuth(){
 export default function App(){
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
-      <nav className="p-4 bg-white shadow-sm flex justify-between">
-        <div><Link to="/">TutorMVP</Link></div>
-        <div className="space-x-4">
-          <Link to="/tutors">Tutors</Link>
-          <Link to="/resources">Resources</Link>
-          <Link to="/dashboard">Dashboard</Link>
-          <NotificationCenter />
-        </div>
-      </nav>
+      <NavigationBar />
       <main className="p-4">
         <Routes>
           <Route path="/login" element={<Login />} />
