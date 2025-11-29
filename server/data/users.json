@@ -1,4 +1,5 @@
 [
   { "id": "u1", "name": "Alice Student", "email": "alice@student.hcmut.edu.vn", "role": "student" },
-  { "id": "u2", "name": "Bob Tutor", "email": "bob@staff.hcmut.edu.vn", "role": "tutor" }
+  { "id": "u2", "name": "Bob Tutor", "email": "bob@staff.hcmut.edu.vn", "role": "tutor" },
+  { "id": "u3", "name": "Carol Tutor", "email": "carol@staff.hcmut.edu.vn", "role": "tutor" }
 ]
