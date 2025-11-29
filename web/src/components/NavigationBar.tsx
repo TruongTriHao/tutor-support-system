@@ -5,7 +5,7 @@ import LogoutButton from "./LogoutButton";
 export default function NavigationBar() {
     return ( 
         <nav className="p-4 bg-white shadow-sm flex justify-between">
-            <div>TutorMVP</div>
+            <div><Link to="/tutors">TutorMVP</Link></div>
             <div className="space-x-4">
                 <Link to="/tutors">Tutors</Link>
                 <Link to="/resources">Resources</Link>

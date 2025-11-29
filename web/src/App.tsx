@@ -7,10 +7,7 @@ import SessionPage from './pages/SessionPage'
 import ResourceList from './pages/ResourceList'
 import ResourceDetail from './pages/ResourceDetail'
 import NavigationBar from './components/NavigationBar'
-
-function requireAuth(){
-  return !!localStorage.getItem('token');
-}
+import ProtectedRoute from './components/ProtectedRoute'
 
 export default function App(){
   return (
@@ -19,13 +16,13 @@ export default function App(){
       <main className="p-4">
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="/tutors" element={ requireAuth() ? <TutorsList /> : <Navigate to="/login" /> } />
-          <Route path="/tutors/:id" element={ requireAuth() ? <TutorProfile /> : <Navigate to="/login" /> } />
-          <Route path="/dashboard" element={ requireAuth() ? <StudentDashboard /> : <Navigate to="/login" /> } />
-          <Route path="/sessions/:id" element={ requireAuth() ? <SessionPage /> : <Navigate to="/login" /> } />
-          <Route path="/resources" element={ requireAuth() ? <ResourceList /> : <Navigate to="/login" /> } />
-          <Route path="/resources/:id" element={ requireAuth() ? <ResourceDetail /> : <Navigate to="/login" /> } />
-          <Route path="/" element={<Navigate to="/tutors" />} />
+          <Route path="/tutors" element={ <ProtectedRoute><TutorsList /></ProtectedRoute> } />
+          <Route path="/tutors/:id" element={ <ProtectedRoute><TutorProfile /></ProtectedRoute> } />
+          <Route path="/dashboard" element={ <ProtectedRoute><StudentDashboard /></ProtectedRoute> } />
+          <Route path="/sessions/:id" element={ <ProtectedRoute><SessionPage /></ProtectedRoute> } />
+          <Route path="/resources" element={ <ProtectedRoute><ResourceList /></ProtectedRoute> } />
+          <Route path="/resources/:id" element={ <ProtectedRoute><ResourceDetail /></ProtectedRoute> } />
+          <Route path="/" element={<ProtectedRoute><TutorsList /></ProtectedRoute>} />
         </Routes>
       </main>
     </div>
