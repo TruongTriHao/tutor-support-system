@@ -1,11 +1,10 @@
-# SE_CC04_CC05_Group6 - Tutor Support MVP
+# Tutor Support System
 
 This repository contains a minimal MVP for the Tutor Support System implementing the main use-cases described in the project documents.
 
 Structure
 - `/web` - Frontend (React + Vite + TypeScript + Tailwind)
 - `/server` - Mock backend (Node + Express) using in-memory data loaded from `/server/data/*.json`
-- `/docs/USECASES.md` - Extracted use-cases summary
 
 Ports
 - Backend: `http://localhost:4000`
