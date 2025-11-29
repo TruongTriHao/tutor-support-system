@@ -8,6 +8,7 @@ import ResourceList from './pages/ResourceList'
 import ResourceDetail from './pages/ResourceDetail'
 import NavigationBar from './components/NavigationBar'
 import ProtectedRoute from './components/ProtectedRoute'
+import Notifications from './pages/Notifications'
 
 export default function App(){
   return (
@@ -22,6 +23,7 @@ export default function App(){
           <Route path="/sessions/:id" element={ <ProtectedRoute><SessionPage /></ProtectedRoute> } />
           <Route path="/resources" element={ <ProtectedRoute><ResourceList /></ProtectedRoute> } />
           <Route path="/resources/:id" element={ <ProtectedRoute><ResourceDetail /></ProtectedRoute> } />
+          <Route path="/notifications" element={ <ProtectedRoute><Notifications /></ProtectedRoute> } />
           <Route path="/" element={<ProtectedRoute><TutorsList /></ProtectedRoute>} />
         </Routes>
       </main>

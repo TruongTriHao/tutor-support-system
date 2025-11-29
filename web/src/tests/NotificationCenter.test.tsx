@@ -2,6 +2,7 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import NotificationCenter from '../components/NotificationCenter'
 import api from '../services/api'
+import { MemoryRouter } from 'react-router-dom'
 
 vi.mock('../services/api')
 
@@ -10,7 +11,7 @@ test('shows notification count for the user', async ()=>{
   ;(api.get as any).mockResolvedValueOnce(notes)
   localStorage.setItem('user', JSON.stringify({ id: 'u1', name: 'Alice' }))
 
-  render(<NotificationCenter />)
+  render(<MemoryRouter><NotificationCenter /></MemoryRouter>)
 
   expect(await screen.findByText(/Notifications \(2\)/)).toBeTruthy()
 })
