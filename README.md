@@ -48,15 +48,3 @@ Acceptance criteria covered
 Tests
 - Server tests: `cd server; npm install; npm test` (runs Vitest + supertest for basic endpoint checks)
 - Frontend tests: basic scaffolding included; run `cd web; npm install; npm test`.
-
-Notes & assumptions
-- Auth is mocked (email-only). No persistence beyond server runtime.
-- Feedback anonymity: `isAnonymous` flag is stored and in aggregation comments are returned but not linked to student ids.
-
-CHANGELOG
-- chore: scaffold repo (docs + skeleton)
-- feat: add mock server and data
-- feat: implement tutors listing & profile
-- feat: implement booking & feedback flows
-- feat: add resources streaming simulation & notifications
-- test: add basic server auth test
