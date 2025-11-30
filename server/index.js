@@ -3,6 +3,7 @@ import cors from 'cors'
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
+import bcrypt from 'bcrypt'
 import { v4 as uuidv4 } from 'uuid'
 
 const __filename = fileURLToPath(import.meta.url)
@@ -28,18 +29,22 @@ app.use(express.json())
 
 // helper
 function findUserByEmail(email){ return users.find(u=>u.email.toLowerCase()===email.toLowerCase()); }
-
 // Auth
 app.post('/api/auth/login', (req,res)=>{
-  const { email } = req.body
-  if(!email) return res.status(400).json({error:'email required'})
+  const { email, password } = req.body
+  if(!email) return res.status(400).json({error:'Email required'})
+  if(!password) return res.status(400).json({error:'Password required'})
   let user = findUserByEmail(email)
-  if(!user){
-    user = { id: 'u' + (users.length+1), name: email.split('@')[0], email, role: 'student' }
-    users.push(user)
-  }
-  const token = 'mock-token-' + user.id
-  res.json({ token, user })
+  if(!user){return res.status(401).json({error:'Invalid credentials'})}
+  bcrypt.compare(password, user.hashedPassword, (err, result)=>{
+    if(err || !result){
+      return res.status(401).json({error:'Invalid credentials'})
+    } 
+    else {
+      const token = 'mock-token-' + user.id
+      res.json({ token, user })
+    }
+  })
 })
 
 // Tutors
