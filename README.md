@@ -12,16 +12,43 @@ Ports
 
 Quick start (development)
 
+Package manager: `yarn` (this project uses `yarn`; run `yarn` instead of `npm`).
+
+Install Yarn
+
+If you don't have Yarn installed, use one of these quick options:
+
+- Recommended (Node 16.10+ — uses Corepack):
+
+```powershell
+corepack enable
+corepack prepare yarn@stable --activate
+```
+
+- npm (fallback):
+
+```powershell
+npm install -g yarn
+```
+
+- Windows (Chocolatey):
+
+```powershell
+choco install yarn
+```
+
+Verify installation with `yarn -v`.
+
 1. Start server
 
 ```powershell
-cd server; npm install; npm run dev
+cd server; yarn; yarn dev
 ```
 
 2. Start frontend (new shell)
 
 ```powershell
-cd web; npm install; npm run dev
+cd web; yarn; yarn dev
 ```
 
 Open `http://localhost:5173` and login using any institutional email (e.g. `alice@student.hcmut.edu.vn`).
@@ -46,5 +73,5 @@ Acceptance criteria covered
 - UC-NOTIFY: `/api/notifications` implemented; frontend polls it.
 
 Tests
-- Server tests: `cd server; npm install; npm test` (runs Vitest + supertest for basic endpoint checks)
-- Frontend tests: basic scaffolding included; run `cd web; npm install; npm test`.
+- Server tests: `cd server; yarn; yarn test` (runs Vitest + supertest for basic endpoint checks)
+- Frontend tests: basic scaffolding included; run `cd web; yarn; yarn test`.
