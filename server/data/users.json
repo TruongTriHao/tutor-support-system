@@ -1,5 +1,5 @@
 [
-  { "id": "u1", "name": "Alice Student", "email": "alice@student.hcmut.edu.vn", "role": "student", "hashedPassword": "$2b$10$CHKIYH3ofTUDvHpv2uZraOJjT9X6VfjgZXLOJCBcxGENdjqtfW9U6" },
-  { "id": "u2", "name": "Bob Tutor", "email": "bob@staff.hcmut.edu.vn", "role": "tutor", "hashedPassword": "$2b$10$NpAdXZFHZLi0VZ8xQL2/6.HHZwz5GeaXJhT7b5IHkI4lTAFFUQlTG" },
-  { "id": "u3", "name": "Carol Tutor", "email": "carol@staff.hcmut.edu.vn", "role": "tutor", "hashedPassword": "$2b$10$w9B/NfH4BC7YJaF/d0i.WOGhpRx6MVamj7PmcnxpBH4dO9AJGLJsS" }
+  { "id": "u1", "name": "Alice", "email": "alice@hcmut.edu.vn", "role": "student", "hashedPassword": "$2b$10$CHKIYH3ofTUDvHpv2uZraOJjT9X6VfjgZXLOJCBcxGENdjqtfW9U6" },
+  { "id": "u2", "name": "Bob", "email": "bob@hcmut.edu.vn", "role": "tutor", "hashedPassword": "$2b$10$NpAdXZFHZLi0VZ8xQL2/6.HHZwz5GeaXJhT7b5IHkI4lTAFFUQlTG" },
+  { "id": "u3", "name": "Carol", "email": "carol@hcmut.edu.vn", "role": "tutor", "hashedPassword": "$2b$10$w9B/NfH4BC7YJaF/d0i.WOGhpRx6MVamj7PmcnxpBH4dO9AJGLJsS" }
 ]
