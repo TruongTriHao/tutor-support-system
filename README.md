@@ -12,29 +12,12 @@ Ports
 
 Quick start (development)
 
-Package manager: `yarn` (this project uses `yarn`; run `yarn` instead of `npm`).
+Package manager: `yarn`.
 
 Install Yarn
 
-If you don't have Yarn installed, use one of these quick options:
-
-- Recommended (Node 16.10+ — uses Corepack):
-
-```powershell
-corepack enable
-corepack prepare yarn@stable --activate
-```
-
-- npm (fallback):
-
 ```powershell
 npm install -g yarn
-```
-
-- Windows (Chocolatey):
-
-```powershell
-choco install yarn
 ```
 
 Verify installation with `yarn -v`.
