@@ -54,7 +54,3 @@ Acceptance criteria covered
 - UC-RESOURCES: `/api/resources` and `/api/resources/:id/stream` implemented. Bookmark in `localStorage`.
 - UC-LOG: `/api/logs` returns access logs for resources.
 - UC-NOTIFY: `/api/notifications` implemented; frontend polls it.
-
-Tests
-- Server tests: `cd server; yarn; yarn test` (runs Vitest + supertest for basic endpoint checks)
-- Frontend tests: basic scaffolding included; run `cd web; yarn; yarn test`.
