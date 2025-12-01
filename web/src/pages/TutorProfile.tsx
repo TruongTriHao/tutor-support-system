@@ -5,8 +5,23 @@ import api from '../services/api'
 export default function TutorProfile(){
   const { id } = useParams()
   const [tutor, setTutor] = useState<any>(null)
-  useEffect(()=>{ if(id) api.get(`/tutors/${id}`).then(r=>setTutor(r)) },[id])
-  if(!tutor) return <div>Loading...</div>
+  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+  useEffect(()=>{ 
+    if(id) {
+      api.get(`/tutors/${id}`)
+        .then(r=>{
+          setTutor(r)
+          setIsLoading(false)
+        })
+        .catch(e=>{
+          setError(e?.message || 'Failed to load tutor')
+          setIsLoading(false)
+        })
+    }
+  },[id])
+  if(isLoading) return <div>Loading...</div>
+  if(error) return <div className="text-red-600">Error: {error}</div>
   return (
     <div className="max-w-2xl">
       <h2 className="text-2xl">{tutor.name}</h2>
