@@ -42,11 +42,11 @@ Thumbs.db
 # Server content/temp
 cnpm/server/content/*.log
 
+# Server data folder
+cnpm/server/data/*.json
+
 # Ignore local npm lock backups
 package-lock.json*
 
 # Optional: ignore generated npm shrinkwrap
 npm-shrinkwrap.json
-
-# Ignore file in server/data folder
-cnpm/server/data/*.json

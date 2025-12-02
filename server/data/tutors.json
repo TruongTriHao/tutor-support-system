@@ -1,4 +1,0 @@
-[
-  { "id": "t1", "name": "Bob", "email": "bob@hcmut.edu.vn", "expertise": ["CS251", "CS102"], "bio": "Senior lecturer in Algorithms" },
-  { "id": "t2", "name": "Carol", "email": "carol@hcmut.edu.vn", "expertise": ["CS251", "MATH101"], "bio": "Graduate tutor in Discrete Math" }
-]

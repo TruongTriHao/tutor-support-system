@@ -1,5 +1,0 @@
-[
-  { "id": "r1", "title": "CS251 Lecture Notes", "courseCode": "CS251", "type": "pdf", "url": "/content/cs251-notes.txt" },
-  { "id": "r2", "title": "Discrete Math Summary", "courseCode": "MATH101", "type": "pdf", "url": "/content/math101-summary.txt" },
-  { "id": "r3", "title": "Algorithms Cheatsheet", "courseCode": "CS102", "type": "pdf", "url": "/content/alg-cheatsheet.txt" }
-]

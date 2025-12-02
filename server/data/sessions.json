@@ -1,5 +1,0 @@
-[
-  { "id": "s1", "tutorId": "t1", "title": "Algorithms help", "courseCode": "CS251", "start": "2025-12-02T10:00:00.000Z", "end": "2025-12-02T11:00:00.000Z", "status": "SCHEDULED", "attendees": ["u1"] },
-  { "id": "s2", "tutorId": "t1", "title": "Office hours", "courseCode": "CS102", "start": "2025-12-05T14:00:00.000Z", "end": "2025-12-05T15:00:00.000Z", "status": "SCHEDULED", "attendees": [] },
-  { "id": "s3", "tutorId": "t2", "title": "Discrete Math Q&A", "courseCode": "MATH101", "start": "2025-12-06T09:00:00.000Z", "end": "2025-12-06T10:00:00.000Z", "status": "COMPLETED", "attendees": ["u1"] }
-]
