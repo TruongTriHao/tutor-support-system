@@ -4,7 +4,7 @@ import NavigationLink from "./NavigationLink";
 export default function NavigationBar() {
     return ( 
         <nav className="p-4 bg-white shadow-sm flex justify-between">
-            <div><Link to="/tutors">TutorMVP</Link></div>
+            <div><Link to="/tutors">Tutor Support System</Link></div>
             <NavigationLink />
         </nav>
     )
