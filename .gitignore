@@ -47,3 +47,6 @@ package-lock.json*
 
 # Optional: ignore generated npm shrinkwrap
 npm-shrinkwrap.json
+
+# Ignore file in server/data folder
+cnpm/server/data/*.json
