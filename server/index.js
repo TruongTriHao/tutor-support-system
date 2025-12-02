@@ -40,6 +40,32 @@ app.use(express.json())
 function findUserByEmail(email){ return users.find(u=>u.email.toLowerCase()===email.toLowerCase()); }
 
 // Auth
+app.post('/api/auth/register', (req,res)=>{
+  const { name, email, role, password } = req.body
+  if(!name) return res.status(400).json({error:'Name required'})
+  if(!email) return res.status(400).json({error:'Email required'})
+  if(!role || (role!=='student' && role!=='tutor')) return res.status(400).json({error:'Valid role required'})
+  if(!password) return res.status(400).json({error:'Password required'})
+  let existing = findUserByEmail(email)
+  if(existing){return res.status(400).json({error:'Email already registered'})}
+  bcrypt.hash(password, 10, (err, hashedPassword)=>{
+    if(err){ return res.status(500).json({error:'Error processing password'}) }
+    const newUser = { id: uuidv4(), name, email, role, hashedPassword }
+    users.push(newUser)
+    if (writeBackToFile('users.json', users).ok === false) {
+      return res.status(500).json({error:'failed to update users'})
+    }
+    if (role === 'tutor') {
+      const newTutor = { id: newUser.id, name: newUser.name, email: newUser.email, expertise: [], bio: '' }
+      tutors.push(newTutor)
+      if (writeBackToFile('tutors.json', tutors).ok === false) {
+        return res.status(500).json({error:'failed to update tutors'})
+      }
+    }
+    res.json(newUser)
+  })
+})
+
 app.post('/api/auth/login', (req,res)=>{
   const { email, password } = req.body
   if(!email) return res.status(400).json({error:'Email required'})
@@ -55,15 +81,33 @@ app.post('/api/auth/login', (req,res)=>{
   })
 })
 
+// Users
+app.get('/api/users', (req,res)=>{
+  res.json(users.map(u=>({ id: u.id, name: u.name, email: u.email, role: u.role })))
+})
+
 // Tutors
 app.get('/api/tutors', (req,res)=>{
   res.json(tutors)
 })
+
 app.get('/api/tutors/:id', (req,res)=>{
   const t = tutors.find(x=>x.id===req.params.id)
   if(!t) return res.status(404).json({error:'not found'})
   const avail = sessions.filter(s=>s.tutorId===t.id)
   res.json({ ...t, sessions: avail })
+})
+
+app.patch('/api/tutors/:id', (req,res)=>{
+  const t = tutors.find(x=>x.id===req.params.id)
+  if(!t) return res.status(404).json({error:'not found'})
+  const { expertise, bio } = req.body
+  if(expertise!==undefined) t.expertise = expertise
+  if(bio!==undefined) t.bio = bio
+  if (writeBackToFile('tutors.json', tutors).ok === false) {
+    return res.status(500).json({error:'failed to update tutors'})
+  }
+  res.json(t)
 })
 
 // Sessions
