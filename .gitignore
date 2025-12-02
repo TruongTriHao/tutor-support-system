@@ -43,7 +43,7 @@ Thumbs.db
 cnpm/server/content/*.log
 
 # Server data folder
-cnpm/server/data/*.json
+server/data/*.json
 
 # Ignore local npm lock backups
 package-lock.json*
