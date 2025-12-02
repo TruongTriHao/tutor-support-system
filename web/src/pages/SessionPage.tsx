@@ -42,7 +42,7 @@ export default function SessionPage(){
         <h3 className="font-semibold">Submit Feedback</h3>
         <div>
           <label className="block">Rating</label>
-          <input type="number" min={1} max={5} value={feedback.rating} onChange={e=>setFeedback({...feedback, rating: Number(e.target.value)})} />
+          <input type="number" min={1} max={5} value={feedback.rating} className='border-2' onChange={e=>setFeedback({...feedback, rating: Number(e.target.value)})} />
         </div>
         <div>
           <label className="block">Comment</label>
