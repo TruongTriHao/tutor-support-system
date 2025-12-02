@@ -14,6 +14,15 @@ function load(name){
   try{ return JSON.parse(fs.readFileSync(path.join(DATA_DIR, name))); }catch(e){ return []; }
 }
 
+async function writeBackToFile(filename, data){
+  try {
+    await fs.promises.writeFile(path.join(DATA_DIR, filename), JSON.stringify(data, null, 2))
+    return {"ok": true}
+  } catch (e) {
+    return {"ok": false, "error": e.message}
+  }
+} 
+
 let users = load('users.json')
 let tutors = load('tutors.json')
 let sessions = load('sessions.json')
@@ -29,6 +38,7 @@ app.use(express.json())
 
 // helper
 function findUserByEmail(email){ return users.find(u=>u.email.toLowerCase()===email.toLowerCase()); }
+
 // Auth
 app.post('/api/auth/login', (req,res)=>{
   const { email, password } = req.body
@@ -39,11 +49,9 @@ app.post('/api/auth/login', (req,res)=>{
   bcrypt.compare(password, user.hashedPassword, (err, result)=>{
     if(err || !result){
       return res.status(401).json({error:'Invalid credentials'})
-    } 
-    else {
-      const token = 'mock-token-' + user.id
-      res.json({ token, user })
     }
+    const token = 'mock-token-' + user.id
+    res.json({ token, user })
   })
 })
 
@@ -68,22 +76,45 @@ app.post('/api/sessions/:id/status', (req,res)=>{
   const s = sessions.find(x=>x.id===req.params.id)
   if(!s) return res.status(404).json({error:'session not found'})
   s.status = status
+  if (writeBackToFile('sessions.json', sessions).ok === false) {
+    return res.status(500).json({error:'failed to update session data'})
+  }
   s.attendees.forEach(uid=>{
     notifications.push({ id: uuidv4(), userId: uid, message: `Session ${s.id} status changed to ${status}`, createdAt: new Date().toISOString() })
   })
+  if (writeBackToFile('notifications.json', notifications).ok === false) {
+    return res.status(500).json({error:'failed to update notifications'})
+  }
   res.json(s)
 })
 
 // Bookings
+app.get('/api/bookings', (req,res)=>{
+  const studentId = req.query.studentId
+  if(studentId){
+    return res.json(bookings.filter(b=>b.studentId===studentId))
+  }
+  res.json(bookings)
+})
+
 app.post('/api/bookings', (req,res)=>{
   const { sessionId, studentId } = req.body
   if(!sessionId || !studentId) return res.status(400).json({error:'missing fields'})
   const s = sessions.find(x=>x.id===sessionId)
   if(!s) return res.status(404).json({error:'session not found'})
   if(!s.attendees.includes(studentId)) s.attendees.push(studentId)
+  if (writeBackToFile('sessions.json', sessions).ok === false) {
+    return res.status(500).json({error:'failed to update session data'})
+  }
   const booking = { id: uuidv4(), sessionId, studentId, createdAt: new Date().toISOString() }
   bookings.push(booking)
+  if (writeBackToFile('bookings.json', bookings).ok === false) {
+    return res.status(500).json({error:'failed to update bookings'})
+  }
   notifications.push({ id: uuidv4(), userId: s.tutorId, message: `New booking for session ${s.id}`, createdAt: new Date().toISOString() })
+  if (writeBackToFile('notifications.json', notifications).ok === false) {
+    return res.status(500).json({error:'failed to update notifications'})
+  }
   res.json(booking)
 })
 
@@ -99,7 +130,13 @@ app.post('/api/feedback', (req,res)=>{
   if(dup) return res.status(400).json({error:'duplicate feedback'})
   const fb = { id: uuidv4(), sessionId, tutorId, studentId, rating, comment, isAnonymous: !!isAnonymous, createdAt: new Date().toISOString() }
   feedbacks.push(fb)
+  if (writeBackToFile('feedback.json', feedbacks).ok === false) {
+    return res.status(500).json({error:'failed to update feedback data'})
+  }
   notifications.push({ id: uuidv4(), userId: tutorId, message: `You received new feedback for session ${sessionId}`, createdAt: new Date().toISOString() })
+  if (writeBackToFile('notifications.json', notifications).ok === false) {
+    return res.status(500).json({error:'failed to update notifications'})
+  }
   res.json(fb)
 })
 
@@ -127,6 +164,9 @@ app.get('/api/resources/:id/stream', (req,res)=>{
   if(!r) return res.status(404).json({error:'not found'})
   const log = { id: uuidv4(), resourceId: r.id, timestamp: new Date().toISOString() }
   logs.push(log)
+  if (writeBackToFile('logs.json', logs).ok === false) {
+    return res.status(500).json({error:'failed to update logs'})
+  }
   const filePath = path.join(__dirname, 'content', path.basename(r.url))
   if(fs.existsSync(filePath)){
     res.sendFile(filePath)
@@ -139,7 +179,13 @@ app.post('/api/resources', (req,res)=>{
   const { title, courseCode, type, url, uploaderId } = req.body
   const r = { id: uuidv4(), title, courseCode, type, url, uploaderId, createdAt: new Date().toISOString() }
   resources.push(r)
+  if (writeBackToFile('resources.json', resources).ok === false) {
+    return res.status(500).json({error:'failed to update resources'}) 
+  }
   notifications.push({ id: uuidv4(), userId: uploaderId, message: `Resource ${r.title} uploaded`, createdAt: new Date().toISOString() })
+  if (writeBackToFile('notifications.json', notifications).ok === false) {
+    return res.status(500).json({error:'failed to update notifications'})
+  }
   res.json(r)
 })
 
@@ -150,11 +196,32 @@ app.get('/api/logs', (req,res)=>{
   res.json(logs)
 })
 
+app.post('/api/logs', (req,res)=>{
+  const { resourceId } = req.body
+  if(!resourceId) return res.status(400).json({error:'resourceId required'})
+  const log = { id: uuidv4(), resourceId, timestamp: new Date().toISOString() }
+  logs.push(log)
+  if (writeBackToFile('logs.json', logs).ok === false) {
+    return res.status(500).json({error:'failed to update logs'})
+  }
+  res.json(log)
+})
+
 // Notifications
 app.get('/api/notifications', (req,res)=>{
   const userId = req.query.userId
   if(userId) return res.json(notifications.filter(n=>n.userId===userId))
   res.json(notifications)
+})
+
+app.post('/api/notifications/clear', (req,res)=>{
+  const { userId } = req.body
+  if(!userId) return res.status(400).json({error:'userId required'})
+  notifications = notifications.filter(n=>n.userId!==userId)
+  if (writeBackToFile('notifications.json', notifications).ok === false) {
+    return res.status(500).json({error:'failed to update notifications'})
+  }
+  res.json({ ok: true })
 })
 
 // Simple health
