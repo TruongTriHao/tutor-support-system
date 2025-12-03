@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import api from '../services/api'
 
 export default function TutorProfile(){
@@ -38,7 +38,7 @@ export default function TutorProfile(){
                 <div className="text-xs">Status: {s.status}</div>
               </div>
               <div>
-                <a className="text-blue-600" href={`/sessions/${s.id}`}>View</a>
+                <Link className="text-blue-600" to={`/sessions/${s.id}`}>View</Link>
               </div>
             </div>
           </div>
