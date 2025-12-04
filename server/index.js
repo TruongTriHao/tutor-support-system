@@ -156,6 +156,10 @@ app.get('/api/sessions', (req,res)=>{
   if(tutorId){
     return res.json(sessions.filter(s=>s.tutorId===tutorId))
   }
+  const studentId = req.query.studentId
+  if(studentId){
+    return res.json(sessions.filter(s=>s.attendees.includes(studentId)))
+  }
   res.json(sessions)
 })
 
