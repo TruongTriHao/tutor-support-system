@@ -7,8 +7,18 @@ export default function SessionPage(){
   const [session, setSession] = useState<any>(null)
   const [feedback, setFeedback] = useState({rating:5, comment:'', isAnonymous:false})
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string|null>(null)
 
-  useEffect(()=>{ if(id) api.get('/sessions').then(list=>{setSession(list.find((s:any)=>s.id===id)); setIsLoading(false)}) },[id])
+  useEffect(()=>{ 
+    if(id) {
+      api.get('/sessions')
+      .then(list=>{
+        const found = list.find((s:any)=>s.id===id)
+        setSession(found)
+        if (!found) setError('Error: Session not found')
+        setIsLoading(false)
+      })
+    }},[id])
 
   async function submitFeedback(){
     if(!session) return
@@ -16,7 +26,7 @@ export default function SessionPage(){
     try{
       await api.post('/feedback', { sessionId: session.id, tutorId: session.tutorId, studentId: user.id, rating: feedback.rating, comment: feedback.comment, isAnonymous: feedback.isAnonymous })
       alert('Feedback saved')
-    }catch(e:any){ alert('Error: ' + (e?.message || '')) }
+    }catch(e:any){ setError('Error: ' + (e?.message || '')) }
   }
 
   async function book(){
@@ -25,12 +35,12 @@ export default function SessionPage(){
       await api.post('/bookings', { sessionId: session.id, studentId: user.id })
       alert('Booked')
     }catch(e:any){
-      alert('Error: ' + (e?.message || ''))
+      setError('Error: ' + (e?.message || ''))
     }
   }
 
   if (isLoading) return <div>Loading...</div>
-  if (!session) return <div className="text-red-600">Error: Session not found</div>
+  if (error) return <div className="text-red-600">{error}</div>
   return (
     <div>
       <h2 className="text-2xl">{session.title}</h2>
