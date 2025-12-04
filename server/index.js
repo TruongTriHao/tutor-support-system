@@ -223,6 +223,7 @@ app.post('/api/bookings', async (req,res)=>{
   const s = sessions.find(x=>x.id===sessionId)
   if(!s) return res.status(404).json({error:'Session not found'})
   if(!s.attendees.includes(studentId)) s.attendees.push(studentId)
+  else return res.status(400).json({error:'Student already booked'})
   if (await writeBackToFile('sessions.json', sessions).ok === false) {
     return res.status(500).json({error:'failed to update session data'})
   }
