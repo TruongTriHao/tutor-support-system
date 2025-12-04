@@ -53,13 +53,13 @@ app.post('/api/auth/register', (req,res)=>{
     const newUser = { id: uuidv4(), name, email, role, hashedPassword }
     users.push(newUser)
     if (await writeBackToFile('users.json', users).ok === false) {
-      return res.status(500).json({error:'failed to update users'})
+      return res.status(500).json({error:'Failed to update users'})
     }
     if (role === 'tutor') {
       const newTutor = { id: newUser.id, name: newUser.name, email: newUser.email, expertise: [], bio: '' }
       tutors.push(newTutor)
       if (await writeBackToFile('tutors.json', tutors).ok === false) {
-        return res.status(500).json({error:'failed to update tutors'})
+        return res.status(500).json({error:'Failed to update tutors'})
       }
     }
     res.json(newUser)
@@ -93,34 +93,34 @@ app.delete('/api/users/:id', async (req,res)=>{
   const user = users[userIndex]
   users.splice(userIndex, 1)
   if (await writeBackToFile('users.json', users).ok === false) {
-    return res.status(500).json({error:'failed to update users'})
+    return res.status(500).json({error:'Failed to update users'})
   }
   if(user.role==='tutor'){
     const tutorIndex = tutors.findIndex(t=>t.id===userId)
     if(tutorIndex!==-1){
       tutors.splice(tutorIndex, 1)
       if (await writeBackToFile('tutors.json', tutors).ok === false) {
-        return res.status(500).json({error:'failed to update tutors'})
+        return res.status(500).json({error:'Failed to update tutors'})
       }
     }
     sessions = sessions.filter(s=>s.tutorId!==userId)
     if (await writeBackToFile('sessions.json', sessions).ok === false) {
-      return res.status(500).json({error:'failed to update sessions'})
+      return res.status(500).json({error:'Failed to update sessions'})
     }
     bookings = bookings.filter(b=>{
       const s = sessions.find(sess=>sess.id===b.sessionId)
       return s && s.tutorId!==userId
     })
     if (await writeBackToFile('bookings.json', bookings).ok === false) {
-      return res.status(500).json({error:'failed to update bookings'})
+      return res.status(500).json({error:'Failed to update bookings'})
     }
     feedbacks = feedbacks.filter(f=>f.tutorId!==userId)
     if (await writeBackToFile('feedback.json', feedbacks).ok === false) {
-      return res.status(500).json({error:'failed to update feedback data'})
+      return res.status(500).json({error:'Failed to update feedback data'})
     }
     resources = resources.filter(r=>r.uploaderId!==userId)
     if (await writeBackToFile('resources.json', resources).ok === false) {
-      return res.status(500).json({error:'failed to update resources'})
+      return res.status(500).json({error:'Failed to update resources'})
     }
   }
   res.json({ ok: true })
@@ -145,7 +145,7 @@ app.patch('/api/tutors/:id', async (req,res)=>{
   if(expertise!==undefined) t.expertise = expertise
   if(bio!==undefined) t.bio = bio
   if (await writeBackToFile('tutors.json', tutors).ok === false) {
-    return res.status(500).json({error:'failed to update tutors'})
+    return res.status(500).json({error:'Failed to update tutors'})
   }
   res.json(t)
 })
@@ -169,18 +169,18 @@ app.patch('/api/sessions/:id/status', async (req,res)=>{
   if(!s) return res.status(404).json({error:'Session not found'})
   s.status = status
   if (await writeBackToFile('sessions.json', sessions).ok === false) {
-    return res.status(500).json({error:'failed to update session data'})
+    return res.status(500).json({error:'Failed to update session data'})
   }
   res.json(s)
 })
 
 app.post('/api/sessions', async (req,res)=>{
   const { tutorId, title, courseCode, start, end, location } = req.body
-  if(!tutorId || !title || !start || !end || !location) return res.status(400).json({error:'missing fields'})
+  if(!tutorId || !title || !start || !end || !location) return res.status(400).json({error:'Missing fields'})
   const s = { id: uuidv4(), tutorId, title, courseCode, start, end, location, status: 'SCHEDULED', attendees: [] }
   sessions.push(s)
   if (await writeBackToFile('sessions.json', sessions).ok === false) {
-    return res.status(500).json({error:'failed to update sessions'})
+    return res.status(500).json({error:'Failed to update sessions'})
   }
   res.json(s)
 })
@@ -191,19 +191,19 @@ app.delete('/api/sessions/:id', async (req,res)=>{
   if(sessionIndex===-1) return res.status(404).json({error:'Session not found'})
   sessions.splice(sessionIndex, 1)
   if (await writeBackToFile('sessions.json', sessions).ok === false) {
-    return res.status(500).json({error:'failed to update sessions'})
+    return res.status(500).json({error:'Failed to update sessions'})
   }
   bookings = bookings.filter(b=>b.sessionId!==sessionId)
   if (await writeBackToFile('bookings.json', bookings).ok === false) {
-    return res.status(500).json({error:'failed to update bookings'})
+    return res.status(500).json({error:'Failed to update bookings'})
   }
   feedbacks = feedbacks.filter(f=>f.sessionId!==sessionId)
   if (await writeBackToFile('feedback.json', feedbacks).ok === false) {
-    return res.status(500).json({error:'failed to update feedback data'})
+    return res.status(500).json({error:'Failed to update feedback data'})
   }
   resources = resources.filter(r=>r.sessionId!==sessionId)
   if (await writeBackToFile('resources.json', resources).ok === false) {
-    return res.status(500).json({error:'failed to update resources'})
+    return res.status(500).json({error:'Failed to update resources'})
   }
   res.json({ ok: true })
 })
@@ -219,22 +219,22 @@ app.get('/api/bookings', (req,res)=>{
 
 app.post('/api/bookings', async (req,res)=>{
   const { sessionId, studentId } = req.body
-  if(!sessionId || !studentId) return res.status(400).json({error:'missing fields'})
+  if(!sessionId || !studentId) return res.status(400).json({error:'Missing fields'})
   const s = sessions.find(x=>x.id===sessionId)
   if(!s) return res.status(404).json({error:'Session not found'})
   if(!s.attendees.includes(studentId)) s.attendees.push(studentId)
   else return res.status(400).json({error:'Student already booked'})
   if (await writeBackToFile('sessions.json', sessions).ok === false) {
-    return res.status(500).json({error:'failed to update session data'})
+    return res.status(500).json({error:'Failed to update session data'})
   }
   const booking = { id: uuidv4(), sessionId, studentId, createdAt: new Date().toISOString() }
   bookings.push(booking)
   if (await writeBackToFile('bookings.json', bookings).ok === false) {
-    return res.status(500).json({error:'failed to update bookings'})
+    return res.status(500).json({error:'Failed to update bookings'})
   }
   notifications.push({ id: uuidv4(), userId: s.tutorId, message: `New booking for session ${s.id}`, createdAt: new Date().toISOString() })
   if (await writeBackToFile('notifications.json', notifications).ok === false) {
-    return res.status(500).json({error:'failed to update notifications'})
+    return res.status(500).json({error:'Failed to update notifications'})
   }
   res.json(booking)
 })
@@ -248,12 +248,12 @@ app.delete('/api/bookings/:id', async (req,res)=>{
   if(s){
     s.attendees = s.attendees.filter(a=>a!==booking.studentId)
     if (await writeBackToFile('sessions.json', sessions).ok === false) {
-      return res.status(500).json({error:'failed to update session data'})
+      return res.status(500).json({error:'Failed to update session data'})
     }
   }
   bookings.splice(bookingIndex, 1)
   if (await writeBackToFile('bookings.json', bookings).ok === false) {
-    return res.status(500).json({error:'failed to update bookings'})
+    return res.status(500).json({error:'Failed to update bookings'})
   }
   res.json({ ok: true })
 })
@@ -261,21 +261,21 @@ app.delete('/api/bookings/:id', async (req,res)=>{
 // Feedback
 app.post('/api/feedback', async (req,res)=>{
   const { sessionId, tutorId, studentId, rating, comment, isAnonymous } = req.body
-  if(!sessionId || !studentId || !tutorId || !rating) return res.status(400).json({error:'missing fields'})
+  if(!sessionId || !studentId || !tutorId || !rating) return res.status(400).json({error:'Missing fields'})
   const s = sessions.find(x=>x.id===sessionId)
   if(!s) return res.status(404).json({error:'Session not found'})
-  if(s.status !== 'COMPLETED') return res.status(400).json({error:'session not completed'})
-  if(!s.attendees.includes(studentId)) return res.status(400).json({error:'student did not attend'})
+  if(s.status !== 'COMPLETED') return res.status(400).json({error:'Session not completed'})
+  if(!s.attendees.includes(studentId)) return res.status(400).json({error:'Student did not attend'})
   const dup = feedbacks.find(f=>f.sessionId===sessionId && f.studentId===studentId)
-  if(dup) return res.status(400).json({error:'duplicate feedback'})
+  if(dup) return res.status(400).json({error:'Duplicate feedback'})
   const fb = { id: uuidv4(), sessionId, tutorId, studentId, rating, comment, isAnonymous: !!isAnonymous, createdAt: new Date().toISOString() }
   feedbacks.push(fb)
   if (await writeBackToFile('feedback.json', feedbacks).ok === false) {
-    return res.status(500).json({error:'failed to update feedback data'})
+    return res.status(500).json({error:'Failed to update feedback data'})
   }
   notifications.push({ id: uuidv4(), userId: tutorId, message: `You received new feedback for session ${sessionId}`, createdAt: new Date().toISOString() })
   if (await writeBackToFile('notifications.json', notifications).ok === false) {
-    return res.status(500).json({error:'failed to update notifications'})
+    return res.status(500).json({error:'Failed to update notifications'})
   }
   res.json(fb)
 })
@@ -305,7 +305,7 @@ app.get('/api/resources/:id/stream', async (req,res)=>{
   const log = { id: uuidv4(), resourceId: r.id, timestamp: new Date().toISOString() }
   logs.push(log)
   if (await writeBackToFile('logs.json', logs).ok === false) {
-    return res.status(500).json({error:'failed to update logs'})
+    return res.status(500).json({error:'Failed to update logs'})
   }
   const filePath = path.join(__dirname, 'content', path.basename(r.url))
   if(fs.existsSync(filePath)){
@@ -320,11 +320,11 @@ app.post('/api/resources', async (req,res)=>{
   const r = { id: uuidv4(), sessionId, tutorId, title, courseCode, type, url, createdAt: new Date().toISOString() }
   resources.push(r)
   if (await writeBackToFile('resources.json', resources).ok === false) {
-    return res.status(500).json({error:'failed to update resources'}) 
+    return res.status(500).json({error:'Failed to update resources'}) 
   }
   notifications.push({ id: uuidv4(), userId: tutorId, message: `Resource ${r.title} uploaded`, createdAt: new Date().toISOString() })
   if (await writeBackToFile('notifications.json', notifications).ok === false) {
-    return res.status(500).json({error:'failed to update notifications'})
+    return res.status(500).json({error:'Failed to update notifications'})
   }
   res.json(r)
 })
@@ -335,7 +335,7 @@ app.delete('/api/resources/:id', async (req,res)=>{
   if(resourceIndex===-1) return res.status(404).json({error:'Resource not found'})
   resources.splice(resourceIndex, 1)
   if (await writeBackToFile('resources.json', resources).ok === false) {
-    return res.status(500).json({error:'failed to update resources'})
+    return res.status(500).json({error:'Failed to update resources'})
   }
   res.json({ ok: true })
 })
@@ -353,7 +353,7 @@ app.post('/api/logs', async (req,res)=>{
   const log = { id: uuidv4(), resourceId, timestamp: new Date().toISOString() }
   logs.push(log)
   if (await writeBackToFile('logs.json', logs).ok === false) {
-    return res.status(500).json({error:'failed to update logs'})
+    return res.status(500).json({error:'Failed to update logs'})
   }
   res.json(log)
 })
@@ -370,7 +370,7 @@ app.post('/api/notifications/clear', async (req,res)=>{
   if(!userId) return res.status(400).json({error:'userId required'})
   notifications = notifications.filter(n=>n.userId!==userId)
   if (await writeBackToFile('notifications.json', notifications).ok === false) {
-    return res.status(500).json({error:'failed to update notifications'})
+    return res.status(500).json({error:'Failed to update notifications'})
   }
   res.json({ ok: true })
 })
