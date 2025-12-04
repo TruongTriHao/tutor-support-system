@@ -6,8 +6,9 @@ export default function SessionPage(){
   const { id } = useParams()
   const [session, setSession] = useState<any>(null)
   const [feedback, setFeedback] = useState({rating:5, comment:'', isAnonymous:false})
+  const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(()=>{ if(id) api.get('/sessions').then(list=>setSession(list.find((s:any)=>s.id===id))) },[id])
+  useEffect(()=>{ if(id) api.get('/sessions').then(list=>{setSession(list.find((s:any)=>s.id===id)); setIsLoading(false)}) },[id])
 
   async function submitFeedback(){
     if(!session) return
@@ -28,7 +29,8 @@ export default function SessionPage(){
     }
   }
 
-  if(!session) return <div>Loading...</div>
+  if (isLoading) return <div>Loading...</div>
+  if (!session) return <div className="text-red-600">Error: Session not found</div>
   return (
     <div>
       <h2 className="text-2xl">{session.title}</h2>
