@@ -15,7 +15,7 @@ export default function NotificationCenter(){
       if(mounted) setNotes(res)
     }
     poll()
-    const t = setInterval(poll, 5000)
+    const t = setInterval(poll, 1000)
     return ()=>{ mounted=false; clearInterval(t) }
   },[])
 

@@ -8,6 +8,7 @@ export default function SessionPage(){
   const [feedback, setFeedback] = useState({rating:5, comment:'', isAnonymous:false})
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string|null>(null)
+  const [booked, setBooked] = useState(false)
 
   useEffect(()=>{ 
     if(id) {
@@ -16,6 +17,10 @@ export default function SessionPage(){
         const found = list.find((s:any)=>s.id===id)
         setSession(found)
         if (!found) setError('Error: Session not found')
+        else {
+          const user = JSON.parse(localStorage.getItem('user')||'null')
+          setBooked(found.attendees?.includes(user.id))
+        }
         setIsLoading(false)
       })
     }},[id])
@@ -34,6 +39,7 @@ export default function SessionPage(){
     try{
       await api.post('/bookings', { sessionId: session.id, studentId: user.id })
       alert('Booked')
+      setBooked(true)
     }catch(e:any){
       setError('Error: ' + (e?.message || ''))
     }
@@ -47,7 +53,7 @@ export default function SessionPage(){
       <div className="text-sm">{new Date(session.start).toLocaleString()} - {new Date(session.end).toLocaleString()}</div>
       <div>Status: {session.status}</div>
       <div className="mt-2">
-        <button onClick={book} className="px-3 py-1 bg-green-600 text-white rounded">Book</button>
+        <button onClick={book} className="px-3 py-1 bg-green-600 text-white rounded">{booked ? 'Booked' : 'Book'}</button>
       </div>
 
       <div className="mt-4 p-3 bg-white rounded shadow">
