@@ -6,11 +6,13 @@ export default function ResourceDetail(){
   const { id } = useParams()
   const [res, setRes] = useState<any>(null)
   const [content, setContent] = useState<string>('')
+  const [isLoading, setIsLoading] = useState(true)
   useEffect(()=>{
     if(!id) return
     api.get('/resources').then(list=>{
       const item = list.find((r:any)=>r.id===id)
       setRes(item)
+      setIsLoading(false)
     })
   },[id])
 
@@ -23,7 +25,8 @@ export default function ResourceDetail(){
     localStorage.setItem('bookmarks', JSON.stringify(b))
   }
 
-  if(!res) return <div>Loading...</div>
+  if(isLoading) return <div>Loading...</div>
+  if(!res) return <div className="text-red-600">Error: Resource not found</div>
   return (
     <div className="max-w-2xl">
       <h2 className="text-2xl">{res.title}</h2>
