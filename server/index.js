@@ -133,14 +133,14 @@ app.get('/api/tutors', (req,res)=>{
 
 app.get('/api/tutors/:id', (req,res)=>{
   const t = tutors.find(x=>x.id===req.params.id)
-  if(!t) return res.status(404).json({error:'not found'})
+  if(!t) return res.status(404).json({error:'Tutor not found'})
   const avail = sessions.filter(s=>s.tutorId===t.id)
   res.json({ ...t, sessions: avail })
 })
 
 app.patch('/api/tutors/:id', async (req,res)=>{
   const t = tutors.find(x=>x.id===req.params.id)
-  if(!t) return res.status(404).json({error:'not found'})
+  if(!t) return res.status(404).json({error:'Tutor not found'})
   const { expertise, bio } = req.body
   if(expertise!==undefined) t.expertise = expertise
   if(bio!==undefined) t.bio = bio
@@ -162,7 +162,7 @@ app.get('/api/sessions', (req,res)=>{
 app.patch('/api/sessions/:id/status', async (req,res)=>{
   const { status } = req.body
   const s = sessions.find(x=>x.id===req.params.id)
-  if(!s) return res.status(404).json({error:'session not found'})
+  if(!s) return res.status(404).json({error:'Session not found'})
   s.status = status
   if (await writeBackToFile('sessions.json', sessions).ok === false) {
     return res.status(500).json({error:'failed to update session data'})
@@ -217,7 +217,7 @@ app.post('/api/bookings', async (req,res)=>{
   const { sessionId, studentId } = req.body
   if(!sessionId || !studentId) return res.status(400).json({error:'missing fields'})
   const s = sessions.find(x=>x.id===sessionId)
-  if(!s) return res.status(404).json({error:'session not found'})
+  if(!s) return res.status(404).json({error:'Session not found'})
   if(!s.attendees.includes(studentId)) s.attendees.push(studentId)
   if (await writeBackToFile('sessions.json', sessions).ok === false) {
     return res.status(500).json({error:'failed to update session data'})
@@ -258,7 +258,7 @@ app.post('/api/feedback', async (req,res)=>{
   const { sessionId, tutorId, studentId, rating, comment, isAnonymous } = req.body
   if(!sessionId || !studentId || !tutorId || !rating) return res.status(400).json({error:'missing fields'})
   const s = sessions.find(x=>x.id===sessionId)
-  if(!s) return res.status(404).json({error:'session not found'})
+  if(!s) return res.status(404).json({error:'Session not found'})
   if(s.status !== 'COMPLETED') return res.status(400).json({error:'session not completed'})
   if(!s.attendees.includes(studentId)) return res.status(400).json({error:'student did not attend'})
   const dup = feedbacks.find(f=>f.sessionId===sessionId && f.studentId===studentId)
@@ -296,7 +296,7 @@ app.get('/api/resources', (req,res)=>{
 
 app.get('/api/resources/:id/stream', async (req,res)=>{
   const r = resources.find(x=>x.id===req.params.id)
-  if(!r) return res.status(404).json({error:'not found'})
+  if(!r) return res.status(404).json({error:'Resource not found'})
   const log = { id: uuidv4(), resourceId: r.id, timestamp: new Date().toISOString() }
   logs.push(log)
   if (await writeBackToFile('logs.json', logs).ok === false) {
