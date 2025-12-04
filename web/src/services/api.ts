@@ -16,5 +16,7 @@ async function request(path:string, opts:any={}){
 export default {
   get: (p:string)=> request(p, { method: 'GET' }),
   getRaw: (p:string)=> request(p, { method: 'GET' }),
-  post: (p:string, body:any)=> request(p, { method: 'POST', body: JSON.stringify(body) })
+  post: (p:string, body:any)=> request(p, { method: 'POST', body: JSON.stringify(body) }),
+  patch: (p:string, body:any)=> request(p, { method: 'PATCH', body: JSON.stringify(body) }),
+  delete: (p:string)=> request(p, { method: 'DELETE' })
 }
