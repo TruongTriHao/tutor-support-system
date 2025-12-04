@@ -18,6 +18,7 @@ export default function NavigationLink() {
             <div className="space-x-4">
                 <Link to="/tutors">Tutors</Link>
                 <Link to="/resources">Resources</Link>
+                <Link to="/bookmarks">Bookmarks</Link>
                 <Link to="/dashboard">Dashboard</Link>
                 <NotificationCenter />
                 <button className="px-2 py-1 border rounded" onClick={logout}>Log out</button>
