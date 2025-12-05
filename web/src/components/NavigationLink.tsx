@@ -17,7 +17,6 @@ export default function NavigationLink() {
         return (
             <div className="space-x-4">
                 <Link to="/tutors">Tutors</Link>
-                <Link to="/resources">Resources</Link>
                 <Link to="/bookmarks">Bookmarks</Link>
                 <Link to="/dashboard">Dashboard</Link>
                 <NotificationCenter />

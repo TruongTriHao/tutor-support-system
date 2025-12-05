@@ -41,7 +41,7 @@ Demo script (sequence of screens)
 2. Browse Tutors -> click a Tutor -> view `TutorProfile` (shows sessions)
 3. Click a session -> `SessionPage` -> Book the session (POST /api/bookings)
 4. Mark a session as COMPLETED via API (or wait for a completed session), then submit feedback
-5. Open `Resources` -> view a resource -> `Open / Stream` (calls `/api/resources/:id/stream`) and bookmark stored in localStorage
+5. Open a session you attended (or your own tutor session) -> under "Resources for this session" view a resource -> `Open / Stream` (calls `/api/resources/:id/stream`) and bookmark stored in localStorage
 6. Check Notifications (top-right) — server pushes notifications when booking/feedback/resources uploaded
 
 Acceptance criteria covered
@@ -51,6 +51,6 @@ Acceptance criteria covered
 - UC-SESSION: `/api/sessions` listing; tutors can update status via `/api/sessions/:id/status`.
 - UC-FEEDBACK: `/api/feedback` validates session COMPLETED and student attended, prevents duplicates.
 - UC-FB-SUMMARY: `/api/feedback/aggregate?tutorId=...` implemented.
-- UC-RESOURCES: `/api/resources` and `/api/resources/:id/stream` implemented. Bookmark in `localStorage`.
+- UC-RESOURCES: session-scoped resources are supported via `/api/resources` (filterable by `sessionId`) and `/api/resources/:id/stream`. Tutors may upload files via `/api/resources/upload`. Bookmarking is stored in `localStorage`.
 - UC-LOG: `/api/logs` returns access logs for resources.
 - UC-NOTIFY: `/api/notifications` implemented; frontend polls it.

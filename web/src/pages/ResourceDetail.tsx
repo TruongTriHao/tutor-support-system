@@ -162,7 +162,7 @@ async function downloadResource(){
           {(!streamingMime.includes('pdf') && !streamingMime.startsWith('image/') && !streamingMime.startsWith('video/') && !streamingMime.startsWith('audio/')) && (
             <div>
               <div>Preview not available for this file type.</div>
-              <a href={streamingUrl} target="_blank" rel="noreferrer" className="text-blue-600 underline">Open in new tab</a>
+              <a onClick={downloadResource} className="text-blue-600 underline cursor-pointer">Please download to view</a>
             </div>
           )}
         </div>

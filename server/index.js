@@ -5,10 +5,28 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import bcrypt from 'bcrypt'
 import { v4 as uuidv4 } from 'uuid'
+import multer from 'multer'
+import mime from 'mime-types'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 const DATA_DIR = path.join(__dirname, 'data')
+const CONTENT_DIR = path.join(__dirname, 'content')
+
+if(!fs.existsSync(CONTENT_DIR)){
+  fs.mkdirSync(CONTENT_DIR, { recursive: true })
+}
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, CONTENT_DIR)
+  },
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname) || ''
+    cb(null, uuidv4() + ext)
+  }
+})
+const upload = multer({ storage })
 
 function load(name){
   try{ return JSON.parse(fs.readFileSync(path.join(DATA_DIR, name))); }catch(e){ return []; }
@@ -328,12 +346,47 @@ app.get('/api/resources/:id/download', (req,res)=>{
 
 app.post('/api/resources', async (req,res)=>{
   const { title, sessionId, tutorId, courseCode, type, url } = req.body
-  const r = { id: uuidv4(), sessionId, tutorId, title, courseCode, type, url, createdAt: new Date().toISOString() }
+  if(!title || !sessionId || !tutorId) return res.status(400).json({error:'Missing fields'})
+  const sess = sessions.find(s=>s.id===sessionId)
+  if(!sess) return res.status(404).json({ error: 'Session not found' })
+  if(sess.tutorId !== tutorId) return res.status(403).json({ error: 'Only the session tutor may add resources' })
+  let finalType = type
+  if(!finalType && url){
+    try{
+      finalType = mime.lookup(path.basename(url)) || ''
+    }catch(e){ finalType = '' }
+  }
+  const r = { id: uuidv4(), sessionId, tutorId, title, courseCode, type: finalType, url, createdAt: new Date().toISOString() }
   resources.push(r)
   if (await writeBackToFile('resources.json', resources).ok === false) {
     return res.status(500).json({error:'Failed to update resources'}) 
   }
-  notifications.push({ id: uuidv4(), userId: tutorId, message: `Resource ${r.title} uploaded`, createdAt: new Date().toISOString() })
+  for (const attendeeId of sess.attendees) {
+    notifications.push({ id: uuidv4(), userId: attendeeId, message: `New resource ${r.title} added to ${sess.courseCode}`, createdAt: new Date().toISOString() })
+  }
+  if (await writeBackToFile('notifications.json', notifications).ok === false) {
+    return res.status(500).json({error:'Failed to update notifications'})
+  }
+  res.json(r)
+})
+
+app.post('/api/resources/upload', upload.single('file'), async (req,res)=>{
+  const file = req.file
+  const { title, sessionId, tutorId, courseCode } = req.body
+  if(!file) return res.status(400).json({ error: 'File required' })
+  if(!title || !sessionId || !tutorId) return res.status(400).json({ error: 'Missing fields' })
+  const sess = sessions.find(s=>s.id===sessionId)
+  if(!sess) return res.status(404).json({ error: 'Session not found' })
+  if(sess.tutorId !== tutorId) return res.status(403).json({ error: 'Only the session tutor may upload resources' })
+  const mimeType = file.mimetype || mime.lookup(file.filename) || ''
+  const r = { id: uuidv4(), sessionId, tutorId, title, courseCode, type: mimeType, url: file.filename, createdAt: new Date().toISOString() }
+  resources.push(r)
+  if (await writeBackToFile('resources.json', resources).ok === false) {
+    return res.status(500).json({error:'Failed to update resources'}) 
+  }
+  for (const attendeeId of sess.attendees) {
+    notifications.push({ id: uuidv4(), userId: attendeeId, message: `New resource ${r.title} added to ${sess.courseCode}`, createdAt: new Date().toISOString() })
+  }
   if (await writeBackToFile('notifications.json', notifications).ok === false) {
     return res.status(500).json({error:'Failed to update notifications'})
   }
@@ -344,6 +397,19 @@ app.delete('/api/resources/:id', async (req,res)=>{
   const resourceId = req.params.id
   const resourceIndex = resources.findIndex(r=>r.id===resourceId)
   if(resourceIndex===-1) return res.status(404).json({error:'Resource not found'})
+  const resource = resources[resourceIndex]
+  const requesterTutorId = req.query.tutorId
+  if(!requesterTutorId) return res.status(400).json({ error: 'tutorId required' })
+  if(resource.tutorId !== requesterTutorId) return res.status(403).json({ error: 'Only the session tutor may delete this resource' })
+  const filePath = path.join(__dirname, 'content', path.basename(resource.url))
+  try {
+    if (fs.existsSync(filePath)) {
+      await fs.promises.unlink(filePath)
+    }
+  } catch (err) {
+    console.error('Failed to delete file', filePath, err)
+    return res.status(500).json({ error: 'Failed to delete resource file' })
+  }
   resources.splice(resourceIndex, 1)
   if (await writeBackToFile('resources.json', resources).ok === false) {
     return res.status(500).json({error:'Failed to update resources'})

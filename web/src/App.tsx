@@ -4,7 +4,6 @@ import TutorsList from './pages/TutorsList'
 import TutorProfile from './pages/TutorProfile'
 import StudentDashboard from './pages/StudentDashboard'
 import SessionPage from './pages/SessionPage'
-import ResourceList from './pages/ResourceList'
 import ResourceDetail from './pages/ResourceDetail'
 import Bookmarks from './pages/Bookmarks'
 import NavigationBar from './components/NavigationBar'
@@ -22,7 +21,6 @@ export default function App(){
           <Route path="/tutors/:id" element={ <ProtectedRoute><TutorProfile /></ProtectedRoute> } />
           <Route path="/dashboard" element={ <ProtectedRoute><StudentDashboard /></ProtectedRoute> } />
           <Route path="/sessions/:id" element={ <ProtectedRoute><SessionPage /></ProtectedRoute> } />
-          <Route path="/resources" element={ <ProtectedRoute><ResourceList /></ProtectedRoute> } />
           <Route path="/resources/:id" element={ <ProtectedRoute><ResourceDetail /></ProtectedRoute> } />
           <Route path="/bookmarks" element={ <ProtectedRoute><Bookmarks /></ProtectedRoute> } />
           <Route path="/notifications" element={ <ProtectedRoute><Notifications /></ProtectedRoute> } />
