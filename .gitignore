@@ -45,6 +45,9 @@ cnpm/server/content/*.log
 # Server data folder
 server/data/*.json
 
+# Server content folder
+server/content/
+
 # Ignore local npm lock backups
 package-lock.json*
 
