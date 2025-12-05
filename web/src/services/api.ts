@@ -13,9 +13,16 @@ async function request(path:string, opts:any={}){
   return res.text()
 }
 
+// helper: return the raw Response so callers can inspect headers/blobs
+async function requestRawResponse(path:string, opts:any={}){
+  const url = path.startsWith('/') ? `${API_BASE}${path}` : `${API_BASE}/${path}`
+  return fetch(url, opts)
+}
+
 export default {
   get: (p:string)=> request(p, { method: 'GET' }),
   getRaw: (p:string)=> request(p, { method: 'GET' }),
+  getResponse: (p:string)=> requestRawResponse(p, { method: 'GET' }),
   post: (p:string, body:any)=> request(p, { method: 'POST', body: JSON.stringify(body) }),
   patch: (p:string, body:any)=> request(p, { method: 'PATCH', body: JSON.stringify(body) }),
   delete: (p:string)=> request(p, { method: 'DELETE' })

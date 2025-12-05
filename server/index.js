@@ -315,6 +315,17 @@ app.get('/api/resources/:id/stream', async (req,res)=>{
   }
 })
 
+app.get('/api/resources/:id/download', (req,res)=>{
+  const r = resources.find(x=>x.id===req.params.id)
+  if(!r) return res.status(404).json({error:'Resource not found'})
+  const filePath = path.join(__dirname, 'content', path.basename(r.url))
+  if(fs.existsSync(filePath)){
+    res.download(filePath, r.title)
+  } else {
+    res.json({ message: `Simulated download for resource ${r.id}`, url: r.url })
+  }
+})
+
 app.post('/api/resources', async (req,res)=>{
   const { title, sessionId, tutorId, courseCode, type, url } = req.body
   const r = { id: uuidv4(), sessionId, tutorId, title, courseCode, type, url, createdAt: new Date().toISOString() }
