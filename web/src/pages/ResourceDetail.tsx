@@ -20,7 +20,6 @@ export default function ResourceDetail(){
     })
   },[id])
 
-  // cleanup object URL on unmount
   useEffect(()=>{
     return ()=>{
       if(streamingUrl) URL.revokeObjectURL(streamingUrl)
@@ -29,7 +28,6 @@ export default function ResourceDetail(){
 
   async function stream(){
     if(!id) return
-    // if already showing text or streaming, close it
     if(content || streamingUrl){
       if(streamingUrl){
         URL.revokeObjectURL(streamingUrl)
@@ -44,14 +42,12 @@ export default function ResourceDetail(){
       const resp = await api.getResponse(`/resources/${id}/stream`)
       if(!resp.ok) throw new Error('Network response was not ok')
       const contentType = (resp.headers.get('Content-Type') || '').toLowerCase()
-      // treat text-like types as readable content
       if(contentType.includes('application/json') || contentType.startsWith('text/') || contentType.includes('application/xml') || contentType.includes('application/javascript')){
         const txt = await resp.text()
         setContent(txt)
         setStreamingMime('text')
         return
       }
-      // for binary types, create object URL and render inline when possible
       const blob = await resp.blob()
       const url = URL.createObjectURL(blob)
       setStreamingUrl(url)
