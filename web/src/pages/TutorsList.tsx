@@ -28,6 +28,7 @@ export default function TutorsList(){
             <h3 className="text-lg font-semibold">{t.name}</h3>
             <p className="text-sm">{t.bio}</p>
             <p className="text-xs">Expertise: {t.expertise.join(', ')}</p>
+            <p className="text-xs">Email: {t.email}</p>
             <Link to={`/tutors/${t.id}`} className="text-blue-600">View profile</Link>
           </div>
         ))}

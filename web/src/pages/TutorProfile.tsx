@@ -86,6 +86,7 @@ export default function TutorProfile(){
       <h2 className="text-2xl">{tutor.name}</h2>
       <p>{tutor.bio}</p>
       <p className="text-sm">Expertise: {Array.isArray(tutor.expertise)? tutor.expertise.join(', '): ''}</p>
+      <p className="text-sm">Email: {tutor.email}</p>
 
       <h3 className="mt-4">Available Sessions</h3>
       <div className="space-y-2">
