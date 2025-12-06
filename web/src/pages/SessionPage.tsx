@@ -86,7 +86,7 @@ export default function SessionPage(){
     if(!session) return
     const user = JSON.parse(localStorage.getItem('user')||'null')
     try{
-      await api.post('/feedback', { sessionId: session.id, tutorId: session.tutorId, studentId: user.id, rating: feedback.rating, comment: feedback.comment, isAnonymous: feedback.isAnonymous })
+      await api.post('/feedback', { sessionId: session.id, tutorId: session.tutorId, studentId: user.id, rating: feedback.rating, comment: feedback.comment, isAnonymous: true })
       alert('Feedback saved')
     }catch(e:any){ setError('Error: ' + (e?.message || '')) }
   }
@@ -122,9 +122,6 @@ export default function SessionPage(){
         <div>
           <label className="block">Comment</label>
           <textarea value={feedback.comment} onChange={e=>setFeedback({...feedback, comment: e.target.value})} className="w-full h-20 border" />
-        </div>
-        <div>
-          <label><input type="checkbox" checked={feedback.isAnonymous} onChange={e=>setFeedback({...feedback, isAnonymous: e.target.checked})} /> Submit anonymously</label>
         </div>
         <button onClick={submitFeedback} className="mt-2 px-3 py-1 bg-blue-600 text-white rounded">Submit Feedback</button>
       </div>
