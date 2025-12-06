@@ -62,7 +62,7 @@ app.post('/api/auth/register', (req,res)=>{
   const { name, email, role, password } = req.body
   if(!name) return res.status(400).json({error:'Name required'})
   if(!email) return res.status(400).json({error:'Email required'})
-  if(!role || (role!=='student' && role!=='tutor')) return res.status(400).json({error:'Valid role required'})
+  if(!role || (role!=='student' && role!=='tutor' && role!=='admin')) return res.status(400).json({error:'Valid role required'})
   if(!password) return res.status(400).json({error:'Password required'})
   let existing = findUserByEmail(email)
   if(existing){return res.status(400).json({error:'Email already registered'})}
@@ -106,6 +106,13 @@ app.get('/api/users', (req,res)=>{
 
 app.delete('/api/users/:id', async (req,res)=>{
   const userId = req.params.id
+  const adminId = req.query.adminId
+  if(!adminId) return res.status(400).json({ error: 'adminId required' })
+  const adminUser = users.find(u=>u.id===adminId)
+  if(!adminUser || adminUser.role !== 'admin') return res.status(403).json({ error: 'Admin privileges required' })
+  if(adminId === userId){
+    return res.status(400).json({ error: 'Admins cannot delete themselves' })
+  }
   const userIndex = users.findIndex(u=>u.id===userId)
   if(userIndex===-1) return res.status(404).json({error:'User not found'})
   const user = users[userIndex]

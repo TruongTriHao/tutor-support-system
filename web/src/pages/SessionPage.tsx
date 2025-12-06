@@ -42,7 +42,7 @@ export default function SessionPage(){
         }
         setIsLoading(false)
       })
-    }},[id])
+    }},[id, booked])
 
   const currentUser = JSON.parse(localStorage.getItem('user')||'null')
   const isTutor = session && currentUser && (currentUser.id === session.tutorId)

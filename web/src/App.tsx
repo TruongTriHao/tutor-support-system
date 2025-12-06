@@ -5,10 +5,14 @@ import TutorProfile from './pages/TutorProfile'
 import StudentDashboard from './pages/StudentDashboard'
 import SessionPage from './pages/SessionPage'
 import ResourceDetail from './pages/ResourceDetail'
+import AdminUsers from './pages/AdminUsers'
 import Bookmarks from './pages/Bookmarks'
 import NavigationBar from './components/NavigationBar'
 import ProtectedRoute from './components/ProtectedRoute'
 import Notifications from './pages/Notifications'
+import StudentRoute from './components/StudentRoute'
+import StudentTutorRoute from './components/StudentTutorRoute'
+import AdminRoute from './components/AdminRoute'
 
 export default function App(){
   return (
@@ -18,12 +22,13 @@ export default function App(){
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/tutors" element={ <ProtectedRoute><TutorsList /></ProtectedRoute> } />
-          <Route path="/tutors/:id" element={ <ProtectedRoute><TutorProfile /></ProtectedRoute> } />
-          <Route path="/dashboard" element={ <ProtectedRoute><StudentDashboard /></ProtectedRoute> } />
-          <Route path="/sessions/:id" element={ <ProtectedRoute><SessionPage /></ProtectedRoute> } />
-          <Route path="/resources/:id" element={ <ProtectedRoute><ResourceDetail /></ProtectedRoute> } />
-          <Route path="/bookmarks" element={ <ProtectedRoute><Bookmarks /></ProtectedRoute> } />
-          <Route path="/notifications" element={ <ProtectedRoute><Notifications /></ProtectedRoute> } />
+          <Route path="/tutors/:id" element={ <ProtectedRoute><StudentRoute><TutorProfile /></StudentRoute></ProtectedRoute> } />
+          <Route path="/dashboard" element={ <ProtectedRoute><StudentTutorRoute><StudentDashboard /></StudentTutorRoute></ProtectedRoute> } />
+          <Route path="/sessions/:id" element={ <ProtectedRoute><StudentTutorRoute><SessionPage /></StudentTutorRoute></ProtectedRoute> } />
+          <Route path="/resources/:id" element={ <ProtectedRoute><StudentTutorRoute><ResourceDetail /></StudentTutorRoute></ProtectedRoute> } />
+          <Route path="/admin/users" element={<ProtectedRoute><AdminRoute><AdminUsers /></AdminRoute></ProtectedRoute>} />
+          <Route path="/bookmarks" element={ <ProtectedRoute><StudentTutorRoute><Bookmarks /></StudentTutorRoute></ProtectedRoute> } />
+          <Route path="/notifications" element={ <ProtectedRoute><StudentTutorRoute><Notifications /></StudentTutorRoute></ProtectedRoute> } />
           <Route path="/" element={<ProtectedRoute><TutorsList /></ProtectedRoute>} />
         </Routes>
       </main>

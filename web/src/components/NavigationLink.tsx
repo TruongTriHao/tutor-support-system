@@ -13,13 +13,20 @@ export default function NavigationLink() {
         }
     }
     
-    if (localStorage.getItem('token')) {
+    const token = localStorage.getItem('token')
+    const user = JSON.parse(localStorage.getItem('user')||'null')
+    if (token) {
         return (
             <div className="space-x-4">
-                <Link to="/tutors">Tutors</Link>
-                <Link to="/bookmarks">Bookmarks</Link>
-                <Link to="/dashboard">Dashboard</Link>
-                <NotificationCenter />
+                {user && user.role === 'student' && <Link to="/tutors">Tutors</Link>}
+                {user && user.role === 'admin' && <Link to="/admin/users">Users</Link>}
+                {user && (user.role === 'student' || user.role === 'tutor') && (
+                    <>
+                        <Link to="/bookmarks">Bookmarks</Link>
+                        <Link to="/dashboard">Dashboard</Link>
+                        <NotificationCenter />
+                    </>
+                )}
                 <button className="px-2 py-1 border rounded" onClick={logout}>Log out</button>
             </div>  
         );

@@ -1,10 +1,24 @@
 import { useEffect, useState } from 'react'
 import api from '../services/api'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export default function TutorsList(){
   const [list, setList] = useState<any[]>([])
+  const navigate = useNavigate()
   useEffect(()=>{ api.get('/tutors').then(r=>setList(r)) },[])
+  const role = JSON.parse(localStorage.getItem('user') || '{}').role;
+  if (role && role === 'tutor') {
+    navigate('/dashboard')
+  }
+  if (role && role === 'admin') {
+    navigate('/admin/users')
+  }
+  if (list.length === 0) {
+    return <div>
+      <h1 className="text-2xl mb-4">Tutors</h1>
+      <p>No tutors found.</p>
+    </div>
+  }
   return (
     <div>
       <h1 className="text-2xl mb-4">Tutors</h1>
