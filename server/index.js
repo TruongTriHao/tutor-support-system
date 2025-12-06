@@ -50,9 +50,36 @@ let bookings = load('bookings.json')
 let notifications = load('notifications.json')
 let logs = load('logs.json')
 
+async function updatePastSessions(){
+  let changed = false
+  const now = new Date()
+  for(const s of sessions){
+    try{
+      if(s.status !== 'COMPLETED'){
+        const end = new Date(s.end)
+        if(!isNaN(end.getTime()) && now > end){
+          s.status = 'COMPLETED'
+          changed = true
+        }
+      }
+    }catch(e){
+    }
+  }
+  if(changed){
+    await writeBackToFile('sessions.json', sessions)
+  }
+}
+
 const app = express()
 app.use(cors())
 app.use(express.json())
+
+updatePastSessions().catch(()=>{})
+setInterval(()=>{
+  updatePastSessions().catch(err=>{
+    console.error('Error updating past sessions:', err)
+  })
+}, 60000)
 
 // helper
 function findUserByEmail(email){ return users.find(u=>u.email.toLowerCase()===email.toLowerCase()); }
