@@ -22,7 +22,7 @@ export default function App(){
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/tutors" element={ <ProtectedRoute><TutorsList /></ProtectedRoute> } />
-          <Route path="/tutors/:id" element={ <ProtectedRoute><StudentRoute><TutorProfile /></StudentRoute></ProtectedRoute> } />
+          <Route path="/tutors/:id" element={ <ProtectedRoute><StudentTutorRoute><TutorProfile /></StudentTutorRoute></ProtectedRoute> } />
           <Route path="/dashboard" element={ <ProtectedRoute><StudentTutorRoute><StudentDashboard /></StudentTutorRoute></ProtectedRoute> } />
           <Route path="/sessions/:id" element={ <ProtectedRoute><StudentTutorRoute><SessionPage /></StudentTutorRoute></ProtectedRoute> } />
           <Route path="/resources/:id" element={ <ProtectedRoute><StudentTutorRoute><ResourceDetail /></StudentTutorRoute></ProtectedRoute> } />

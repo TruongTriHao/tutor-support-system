@@ -20,10 +20,11 @@ export default function NavigationLink() {
             <div className="space-x-4">
                 {user && user.role === 'student' && <Link to="/tutors">Tutors</Link>}
                 {user && user.role === 'admin' && <Link to="/admin/users">Users</Link>}
+                {user && user.role === 'student' && <Link to="/dashboard">Dashboard</Link>}
+                {user && user.role === 'tutor' && <Link to={`/tutors/${user.id}`}>Dashboard</Link>}
                 {user && (user.role === 'student' || user.role === 'tutor') && (
                     <>
                         <Link to="/bookmarks">Bookmarks</Link>
-                        <Link to="/dashboard">Dashboard</Link>
                         <NotificationCenter />
                     </>
                 )}

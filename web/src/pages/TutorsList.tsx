@@ -8,7 +8,7 @@ export default function TutorsList(){
   useEffect(()=>{ api.get('/tutors').then(r=>setList(r)) },[])
   const role = JSON.parse(localStorage.getItem('user') || '{}').role;
   if (role && role === 'tutor') {
-    navigate('/dashboard')
+    navigate(`/tutors/${JSON.parse(localStorage.getItem('user') || '{}').id}`)
   }
   if (role && role === 'admin') {
     navigate('/admin/users')
