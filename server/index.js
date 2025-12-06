@@ -257,7 +257,7 @@ app.post('/api/bookings', async (req,res)=>{
   if (await writeBackToFile('bookings.json', bookings).ok === false) {
     return res.status(500).json({error:'Failed to update bookings'})
   }
-  notifications.push({ id: uuidv4(), userId: s.tutorId, message: `New booking for session ${s.id}`, createdAt: new Date().toISOString() })
+  notifications.push({ id: uuidv4(), userId: s.tutorId, message: `New booking for session ${s.title}`, createdAt: new Date().toISOString() })
   if (await writeBackToFile('notifications.json', notifications).ok === false) {
     return res.status(500).json({error:'Failed to update notifications'})
   }
@@ -298,7 +298,7 @@ app.post('/api/feedback', async (req,res)=>{
   if (await writeBackToFile('feedback.json', feedbacks).ok === false) {
     return res.status(500).json({error:'Failed to update feedback data'})
   }
-  notifications.push({ id: uuidv4(), userId: tutorId, message: `You received new feedback for session ${sessionId}`, createdAt: new Date().toISOString() })
+  notifications.push({ id: uuidv4(), userId: tutorId, message: `You received new feedback for session ${s.title}`, createdAt: new Date().toISOString() })
   if (await writeBackToFile('notifications.json', notifications).ok === false) {
     return res.status(500).json({error:'Failed to update notifications'})
   }
@@ -369,7 +369,7 @@ app.post('/api/resources', async (req,res)=>{
     return res.status(500).json({error:'Failed to update resources'}) 
   }
   for (const attendeeId of sess.attendees) {
-    notifications.push({ id: uuidv4(), userId: attendeeId, message: `New resource ${r.title} added to ${sess.courseCode}`, createdAt: new Date().toISOString() })
+    notifications.push({ id: uuidv4(), userId: attendeeId, message: `New resource ${r.title} added to ${sess.title}`, createdAt: new Date().toISOString() })
   }
   if (await writeBackToFile('notifications.json', notifications).ok === false) {
     return res.status(500).json({error:'Failed to update notifications'})
@@ -392,7 +392,7 @@ app.post('/api/resources/upload', upload.single('file'), async (req,res)=>{
     return res.status(500).json({error:'Failed to update resources'}) 
   }
   for (const attendeeId of sess.attendees) {
-    notifications.push({ id: uuidv4(), userId: attendeeId, message: `New resource ${r.title} added to ${sess.courseCode}`, createdAt: new Date().toISOString() })
+    notifications.push({ id: uuidv4(), userId: attendeeId, message: `New resource ${r.title} added to ${sess.title}`, createdAt: new Date().toISOString() })
   }
   if (await writeBackToFile('notifications.json', notifications).ok === false) {
     return res.status(500).json({error:'Failed to update notifications'})
