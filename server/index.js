@@ -496,6 +496,15 @@ app.get('/api/feedback/aggregate', (req,res)=>{
   res.json({ tutorId, average: avg, count, recent })
 })
 
+app.get('/api/feedback/:sessionId', (req,res)=>{
+  const sessionId = req.params.sessionId
+  const list = feedbacks.filter(f=>f.sessionId===sessionId).map(f=>({
+    rating: f.rating,
+    comment: f.comment,
+  }))
+  res.json(list)
+})
+
 // Resources
 app.get('/api/resources', (req,res)=>{
   const courseCode = req.query.courseCode

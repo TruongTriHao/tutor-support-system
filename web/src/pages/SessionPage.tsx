@@ -8,6 +8,9 @@ export default function SessionPage(){
   const [session, setSession] = useState<any>(null)
   const [resources, setResources] = useState<any[]>([])
   const [canViewResources, setCanViewResources] = useState(false)
+  const [attendeesDetails, setAttendeesDetails] = useState<any[]>([])
+  const [sessionFeedback, setSessionFeedback] = useState<any[]>([])
+  const [allUsers, setAllUsers] = useState<any[]>([])
   const [newTitle, setNewTitle] = useState('')
   const [newUrl, setNewUrl] = useState('')
   const [newFile, setNewFile] = useState<File | null>(null)
@@ -39,6 +42,18 @@ export default function SessionPage(){
           } else {
             setResources([])
           }
+          api.get('/users').then((users:any[])=>{
+            setAllUsers(users)
+            const attendees = (found.attendees||[]).map((aid:any)=> users.find((u:any)=>u.id===aid)).filter(Boolean)
+            setAttendeesDetails(attendees)
+          }).catch(()=>{
+            setAttendeesDetails([])
+          })
+          api.get(`/feedback/${found.id}`).then((all:any[])=>{
+            setSessionFeedback(all)
+          }).catch(()=>{
+            setSessionFeedback([])
+          })
         }
         setIsLoading(false)
       })
@@ -109,22 +124,26 @@ export default function SessionPage(){
       <h2 className="text-2xl">{session.title}</h2>
       <div className="text-sm">{new Date(session.start).toLocaleString()} - {new Date(session.end).toLocaleString()}</div>
       <div>Status: {session.status}</div>
-      <div className="mt-2">
-        <button onClick={book} className="px-3 py-1 bg-green-600 text-white rounded">{booked ? 'Booked' : 'Book'}</button>
-      </div>
+      { !isTutor && 
+      <div>
+        <div className="mt-2">
+          <button onClick={book} className="px-3 py-1 bg-green-600 text-white rounded">{booked ? 'Booked' : 'Book'}</button>
+        </div>
 
-      <div className="mt-4 p-3 bg-white rounded shadow">
-        <h3 className="font-semibold">Submit Feedback</h3>
-        <div>
-          <label className="block">Rating</label>
-          <input type="number" min={1} max={5} value={feedback.rating} className='border-2' onChange={e=>setFeedback({...feedback, rating: Number(e.target.value)})} />
+        <div className="mt-4 p-3 bg-white rounded shadow">
+          <h3 className="font-semibold">Submit Feedback</h3>
+          <div>
+            <label className="block">Rating</label>
+            <input type="number" min={1} max={5} value={feedback.rating} className='border-2' onChange={e=>setFeedback({...feedback, rating: Number(e.target.value)})} />
+          </div>
+          <div>
+            <label className="block">Comment</label>
+            <textarea value={feedback.comment} onChange={e=>setFeedback({...feedback, comment: e.target.value})} className="w-full h-20 border" />
+          </div>
+          <button onClick={submitFeedback} className="mt-2 px-3 py-1 bg-blue-600 text-white rounded">Submit Feedback</button>
         </div>
-        <div>
-          <label className="block">Comment</label>
-          <textarea value={feedback.comment} onChange={e=>setFeedback({...feedback, comment: e.target.value})} className="w-full h-20 border" />
-        </div>
-        <button onClick={submitFeedback} className="mt-2 px-3 py-1 bg-blue-600 text-white rounded">Submit Feedback</button>
       </div>
+      }
 
       <div className="mt-4 p-3 bg-white rounded shadow">
         <h3 className="font-semibold">Resources for this session</h3>
@@ -191,6 +210,41 @@ export default function SessionPage(){
           </>
         )}
       </div>
+
+      {/* Attendees (visible to tutor) */}
+      {isTutor && (
+        <div className="mt-4 p-3 bg-white rounded shadow">
+          <h3 className="font-semibold">Attendees</h3>
+          {attendeesDetails.length === 0 ? (
+            <div className="text-sm text-gray-600 mt-2">No attendees for this session.</div>
+          ) : (
+            <ul className="mt-2 space-y-2">
+              {attendeesDetails.map(a=> (
+                <li key={a.id} className="text-sm">
+                  <div className="font-medium">{a.name}</div>
+                  <div className="text-xs text-gray-600">{a.email}</div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
+      {/* Feedback for tutor to review */}
+      {isTutor && (
+        <div className="mt-4 p-3 bg-white rounded shadow">
+          <h3 className="font-semibold">Feedback for this session</h3>
+          {sessionFeedback.length === 0 && <div className="text-sm text-gray-600 mt-2">No feedback yet.</div>}
+          {sessionFeedback.map(f=>{
+            return (
+              <div key={f.id} className="mt-3 border-t pt-2">
+                <div className="text-sm font-medium">Rating: {f.rating}</div>
+                <div className="text-sm mt-1">{f.comment || <span className="text-gray-500">(no comment)</span>}</div>
+              </div>
+            )
+          })}
+        </div>
+      )}
     </div>
   )
 }
