@@ -1,0 +1,115 @@
+[
+  {
+    "id": "3c054b16-6c67-4c27-aec3-cfe48dc15a86",
+    "name": "Alice",
+    "email": "alice@hcmut.edu.vn",
+    "expertise": [
+      "CS101",
+      "Algorithms",
+      "Programming"
+    ],
+    "bio": "PhD student focusing on algorithms and competitive programming.",
+    "availability": [
+      {
+        "dayOfWeek": 1,
+        "start_time": "09:00",
+        "end_time": "12:00"
+      },
+      {
+        "dayOfWeek": 3,
+        "start_time": "13:30",
+        "end_time": "17:00"
+      }
+    ],
+    "averageRating": 4.67,
+    "ratingCount": 3,
+    "sessionTypes": [
+      "one-on-one"
+    ]
+  },
+  {
+    "id": "0efdef96-0884-43ed-8e73-3458b2acdb72",
+    "name": "Bob",
+    "email": "bob@hcmut.edu.vn",
+    "expertise": [
+      "CS102",
+      "Databases",
+      "SQL"
+    ],
+    "bio": "Software engineer with industry experience in database systems.",
+    "availability": [
+      {
+        "dayOfWeek": 2,
+        "start_time": "10:00",
+        "end_time": "12:00"
+      },
+      {
+        "dayOfWeek": 4,
+        "start_time": "14:00",
+        "end_time": "17:00"
+      }
+    ],
+    "averageRating": 3,
+    "ratingCount": 1,
+    "sessionTypes": [
+      "one-on-one",
+      "group"
+    ]
+  },
+  {
+    "id": "0dc68ed9-f114-4aab-ba4d-d7ddd726220e",
+    "name": "Carol",
+    "email": "carol@hcmut.edu.vn",
+    "expertise": [
+      "MATH101",
+      "Calculus",
+      "Linear Algebra"
+    ],
+    "bio": "Math tutor who enjoys breaking down complex calculus problems.",
+    "availability": [
+      {
+        "dayOfWeek": 0,
+        "start_time": "08:00",
+        "end_time": "10:30"
+      },
+      {
+        "dayOfWeek": 5,
+        "start_time": "09:00",
+        "end_time": "12:00"
+      }
+    ],
+    "averageRating": 4.5,
+    "ratingCount": 2,
+    "sessionTypes": [
+      "one-on-one"
+    ]
+  },
+  {
+    "id": "76bfd172-e35b-4c43-9637-cf72c73c875a",
+    "name": "Dan",
+    "email": "dan@hcmut.edu.vn",
+    "expertise": [
+      "CS100",
+      "Intro to CS",
+      "Teaching"
+    ],
+    "bio": "Passionate about helping first-year students get comfortable with CS.",
+    "availability": [
+      {
+        "dayOfWeek": 1,
+        "start_time": "16:00",
+        "end_time": "19:00"
+      },
+      {
+        "dayOfWeek": 3,
+        "start_time": "09:00",
+        "end_time": "11:00"
+      }
+    ],
+    "averageRating": 0,
+    "ratingCount": 0,
+    "sessionTypes": [
+      "group"
+    ]
+  }
+]

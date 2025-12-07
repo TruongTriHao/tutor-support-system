@@ -1,0 +1,42 @@
+[
+  {
+    "id": "cc5f8029-7b9b-4e85-8c44-5ef48b9cdcec",
+    "sessionId": "ddb54b9d-11d6-415a-80be-e8f55fcd035d",
+    "tutorId": "3c054b16-6c67-4c27-aec3-cfe48dc15a86",
+    "title": "Algorithms - Lecture 1 Recording",
+    "courseCode": "CS101",
+    "type": "video/mp4",
+    "url": "412e2a62-3d4d-46d5-b7c2-66f16f062dc1.mp4",
+    "createdAt": "2025-12-07T06:43:22.042Z"
+  },
+  {
+    "id": "cb5825b6-2cb6-42d5-9eba-768bd329e5f4",
+    "sessionId": "bcfe6982-2ceb-44b0-89c6-bc84f076bf6c",
+    "tutorId": "0dc68ed9-f114-4aab-ba4d-d7ddd726220e",
+    "title": "Calculus - Problem Solving",
+    "courseCode": "MATH101",
+    "type": "application/pdf",
+    "url": "126a8aa8-a48b-40ea-b409-7c4b83a21a11.pdf",
+    "createdAt": "2025-12-07T06:44:57.689Z"
+  },
+  {
+    "id": "fa13e03a-14b0-4017-b63b-b4bd40d673bd",
+    "sessionId": "3ac9a8c7-51f0-4d48-964f-02be183ba188",
+    "tutorId": "0efdef96-0884-43ed-8e73-3458b2acdb72",
+    "title": "Databases - Recap Slides",
+    "courseCode": "CS102",
+    "type": "image/png",
+    "url": "46588c52-bb02-49c3-9ff3-4ebd52a2f54d.png",
+    "createdAt": "2025-12-07T06:49:04.189Z"
+  },
+  {
+    "id": "5df60144-73bc-449a-b41f-3bf5a6550fb1",
+    "sessionId": "0a93d614-6e0e-4e24-b7f5-3c4e3bafb237",
+    "tutorId": "3c054b16-6c67-4c27-aec3-cfe48dc15a86",
+    "title": "Algorithms - Practice Problems (zip)",
+    "courseCode": "CS101",
+    "type": "application/x-zip-compressed",
+    "url": "5155b4fa-0f8c-4683-9b51-d58c3ab9066b.zip",
+    "createdAt": "2025-12-07T06:50:34.711Z"
+  }
+]

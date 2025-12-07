@@ -1,0 +1,86 @@
+[
+  {
+    "id": "d00351ce-7275-4777-84ad-baf6019c4223",
+    "name": "admin",
+    "email": "admin@hcmut.edu.vn",
+    "role": "admin",
+    "hashedPassword": "$2a$10$AgjADRxQZTmd0B8jwGCf..qkfuesiTmubMPFkJhAlpcZt2bcnF5Uu"
+  },
+  {
+    "id": "0e5ca861-1dc5-4379-95a0-1a39c3ac8e01",
+    "name": "admin2",
+    "email": "admin2@hcmut.edu.vn",
+    "role": "admin",
+    "hashedPassword": "$2b$10$0KFs3P94qmY65hnK7PW9Se0CB6zyebaJp9e45roCjxVlSdMAVJSIq"
+  },
+  {
+    "id": "3c054b16-6c67-4c27-aec3-cfe48dc15a86",
+    "name": "Alice",
+    "email": "alice@hcmut.edu.vn",
+    "role": "tutor",
+    "hashedPassword": "$2b$10$GpSepEKKpgH10DkJxl5MGOc7WfTumFWvjdgS2TkOyQICBXsb62VmW"
+  },
+  {
+    "id": "0efdef96-0884-43ed-8e73-3458b2acdb72",
+    "name": "Bob",
+    "email": "bob@hcmut.edu.vn",
+    "role": "tutor",
+    "hashedPassword": "$2b$10$Xf9qRB2DtENxX7bXebPBnuBTUSGqMGJXUngiv4hEjztsnJuxSlQ.O"
+  },
+  {
+    "id": "0dc68ed9-f114-4aab-ba4d-d7ddd726220e",
+    "name": "Carol",
+    "email": "carol@hcmut.edu.vn",
+    "role": "tutor",
+    "hashedPassword": "$2b$10$JS1BIX2JsKiQeF3kqKjxWuleNau.PeOmRYUZK89VDTi74.DFez2IG"
+  },
+  {
+    "id": "76bfd172-e35b-4c43-9637-cf72c73c875a",
+    "name": "Dan",
+    "email": "dan@hcmut.edu.vn",
+    "role": "tutor",
+    "hashedPassword": "$2b$10$6sxQMHFZbX2fCEomGl6QleFSeN/.fzfpoQ/WVPwpqbje.cgVRfy5q"
+  },
+  {
+    "id": "39aad36f-19af-42ca-bd15-242f46ac4359",
+    "name": "Eve",
+    "email": "eve@hcmut.edu.vn",
+    "role": "student",
+    "hashedPassword": "$2b$10$JJtEdbABditxiGfFYWEtkuaxUrd8YnQIkvKY1R7jFoXgxWFhgQ8/e"
+  },
+  {
+    "id": "d791f6a1-7341-4026-ac29-ba7428a63841",
+    "name": "Frank",
+    "email": "frank@hcmut.edu.vn",
+    "role": "student",
+    "hashedPassword": "$2b$10$4p3bMVemOLtSPedEUGGAmOAXDCPXphUAi2c1gGtULfLssFFOOg2nK"
+  },
+  {
+    "id": "bf615b50-aea3-4144-b4ff-a72a9aa9b955",
+    "name": "Grace",
+    "email": "grace@hcmut.edu.vn",
+    "role": "student",
+    "hashedPassword": "$2b$10$upNLFYlC3jTqpaeqL3kNf.1fPB7NQYxduIy7JVEMZqT2thKZGyiBi"
+  },
+  {
+    "id": "086866d2-b49b-4f56-b813-2674c8e649f1",
+    "name": "Harry",
+    "email": "harry@hcmut.edu.vn",
+    "role": "student",
+    "hashedPassword": "$2b$10$xGKiiK4g1Eehe5u1.I8PWeQ5TnKcJpespOkEI6GpvTXT/i0tL1WKy"
+  },
+  {
+    "id": "c13602b3-7fa0-4788-a2cd-8d6edca4f45c",
+    "name": "Ivan",
+    "email": "ivan@hcmut.edu.vn",
+    "role": "student",
+    "hashedPassword": "$2b$10$CAtgltssEQgLm1d7CPWUvOnautB5Ujk0ZQCI/yWDC2MyOE7Q4Xhwq"
+  },
+  {
+    "id": "fec62751-6bbb-40dd-b137-9a61745dacda",
+    "name": "Judy",
+    "email": "judy@hcmut.edu.vn",
+    "role": "student",
+    "hashedPassword": "$2b$10$I6miMqtnHF2usw6FwxVcPuQJbWFIt2C9YRHUFHCiFObZojmavKp72"
+  }
+]

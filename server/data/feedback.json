@@ -1,0 +1,62 @@
+[
+  {
+    "id": "e148e12c-6fc2-4458-acfa-c4638c461834",
+    "sessionId": "ddb54b9d-11d6-415a-80be-e8f55fcd035d",
+    "tutorId": "3c054b16-6c67-4c27-aec3-cfe48dc15a86",
+    "studentId": "39aad36f-19af-42ca-bd15-242f46ac4359",
+    "rating": 5,
+    "comment": "Great lecture — clear explanations and helpful examples.",
+    "isAnonymous": true,
+    "createdAt": "2025-12-07T06:26:09.222Z"
+  },
+  {
+    "id": "52971cbc-9d0c-44cd-9707-55eb3c98a5ba",
+    "sessionId": "ddb54b9d-11d6-415a-80be-e8f55fcd035d",
+    "tutorId": "3c054b16-6c67-4c27-aec3-cfe48dc15a86",
+    "studentId": "d791f6a1-7341-4026-ac29-ba7428a63841",
+    "rating": 4,
+    "comment": "Very useful, would like more practice problems.",
+    "isAnonymous": true,
+    "createdAt": "2025-12-07T06:31:04.965Z"
+  },
+  {
+    "id": "5749c80b-2b5f-4e45-aa55-0fadac284ebd",
+    "sessionId": "0a93d614-6e0e-4e24-b7f5-3c4e3bafb237",
+    "tutorId": "3c054b16-6c67-4c27-aec3-cfe48dc15a86",
+    "studentId": "bf615b50-aea3-4144-b4ff-a72a9aa9b955",
+    "rating": 5,
+    "comment": "Excellent practice problems — helped me a lot.",
+    "isAnonymous": true,
+    "createdAt": "2025-12-07T06:32:30.217Z"
+  },
+  {
+    "id": "9fd525af-301e-4902-bc13-76ef90fd02a5",
+    "sessionId": "3ac9a8c7-51f0-4d48-964f-02be183ba188",
+    "tutorId": "0efdef96-0884-43ed-8e73-3458b2acdb72",
+    "studentId": "086866d2-b49b-4f56-b813-2674c8e649f1",
+    "rating": 3,
+    "comment": "Okay recap. More real-world examples would help.",
+    "isAnonymous": true,
+    "createdAt": "2025-12-07T06:37:20.858Z"
+  },
+  {
+    "id": "a797bcc4-0f53-4d8c-92f1-eeb13fcaa55f",
+    "sessionId": "bcfe6982-2ceb-44b0-89c6-bc84f076bf6c",
+    "tutorId": "0dc68ed9-f114-4aab-ba4d-d7ddd726220e",
+    "studentId": "c13602b3-7fa0-4788-a2cd-8d6edca4f45c",
+    "rating": 4,
+    "comment": "Solid explanations, appreciated the step-by-step solutions.",
+    "isAnonymous": true,
+    "createdAt": "2025-12-07T06:38:06.297Z"
+  },
+  {
+    "id": "25d152d5-339c-4453-a19d-f444e7e9795b",
+    "sessionId": "c3ee84d2-7610-4c08-8c0a-ead30a971463",
+    "tutorId": "0dc68ed9-f114-4aab-ba4d-d7ddd726220e",
+    "studentId": "fec62751-6bbb-40dd-b137-9a61745dacda",
+    "rating": 5,
+    "comment": "Very helpful review before the exam — thanks!",
+    "isAnonymous": true,
+    "createdAt": "2025-12-07T06:38:57.411Z"
+  }
+]

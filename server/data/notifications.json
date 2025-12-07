@@ -1,0 +1,122 @@
+[
+  {
+    "id": "d57a89e3-32e7-4170-ac09-2d20e166172f",
+    "userId": "3c054b16-6c67-4c27-aec3-cfe48dc15a86",
+    "message": "New booking for session Algorithms - Lecture 1",
+    "createdAt": "2025-12-07T06:12:47.847Z"
+  },
+  {
+    "id": "c41eb739-ca6a-4b19-a451-522401d2a2fc",
+    "userId": "3c054b16-6c67-4c27-aec3-cfe48dc15a86",
+    "message": "New booking for session Algorithms - Lecture 1",
+    "createdAt": "2025-12-07T06:20:18.413Z"
+  },
+  {
+    "id": "bf9e3e16-d1c3-422f-bd78-4ffd5213acb6",
+    "userId": "3c054b16-6c67-4c27-aec3-cfe48dc15a86",
+    "message": "New booking for session Algorithms - Practice Session",
+    "createdAt": "2025-12-07T06:21:45.931Z"
+  },
+  {
+    "id": "127eaff6-4143-4fe3-994f-3ce7e365872b",
+    "userId": "0efdef96-0884-43ed-8e73-3458b2acdb72",
+    "message": "New booking for session Databases - Practical",
+    "createdAt": "2025-12-07T06:22:23.807Z"
+  },
+  {
+    "id": "2b110054-9eec-423a-bdde-501ca91cac2e",
+    "userId": "0efdef96-0884-43ed-8e73-3458b2acdb72",
+    "message": "New booking for session Databases - Lecture Recap",
+    "createdAt": "2025-12-07T06:23:04.250Z"
+  },
+  {
+    "id": "4c20b297-d934-4c4e-8932-4e60163b19f7",
+    "userId": "0dc68ed9-f114-4aab-ba4d-d7ddd726220e",
+    "message": "New booking for session Calculus - Problem Solving",
+    "createdAt": "2025-12-07T06:23:39.804Z"
+  },
+  {
+    "id": "cdd2532b-2bdd-436a-a57a-87d62295f9c4",
+    "userId": "0dc68ed9-f114-4aab-ba4d-d7ddd726220e",
+    "message": "New booking for session Calculus - Exam Review",
+    "createdAt": "2025-12-07T06:24:41.303Z"
+  },
+  {
+    "id": "05d6784a-1561-40f0-a345-22971b6fb5d5",
+    "userId": "3c054b16-6c67-4c27-aec3-cfe48dc15a86",
+    "message": "You received new feedback for session Algorithms - Lecture 1",
+    "createdAt": "2025-12-07T06:26:09.222Z"
+  },
+  {
+    "id": "e70dcc60-f5db-41a0-a6a3-803111389fda",
+    "userId": "3c054b16-6c67-4c27-aec3-cfe48dc15a86",
+    "message": "You received new feedback for session Algorithms - Lecture 1",
+    "createdAt": "2025-12-07T06:31:04.970Z"
+  },
+  {
+    "id": "25e50c63-cda6-41f5-bbc1-c6b8c6c8105b",
+    "userId": "3c054b16-6c67-4c27-aec3-cfe48dc15a86",
+    "message": "You received new feedback for session Algorithms - Practice Session",
+    "createdAt": "2025-12-07T06:32:30.217Z"
+  },
+  {
+    "id": "12e36fc4-832a-4153-8aa1-d0fc14dc441f",
+    "userId": "0efdef96-0884-43ed-8e73-3458b2acdb72",
+    "message": "You received new feedback for session Databases - Lecture Recap",
+    "createdAt": "2025-12-07T06:37:20.858Z"
+  },
+  {
+    "id": "1a866ed4-93d0-4134-8811-f321c6297462",
+    "userId": "0dc68ed9-f114-4aab-ba4d-d7ddd726220e",
+    "message": "You received new feedback for session Calculus - Problem Solving",
+    "createdAt": "2025-12-07T06:38:06.298Z"
+  },
+  {
+    "id": "a3f840fc-593b-4733-992a-31a9fa8e1bd6",
+    "userId": "0dc68ed9-f114-4aab-ba4d-d7ddd726220e",
+    "message": "You received new feedback for session Calculus - Exam Review",
+    "createdAt": "2025-12-07T06:38:57.411Z"
+  },
+  {
+    "id": "dc8accf4-4ad6-4721-9738-819b44e293b3",
+    "userId": "39aad36f-19af-42ca-bd15-242f46ac4359",
+    "message": "New resource Algorithms - Lecture 1 added to Algorithms - Lecture 1",
+    "createdAt": "2025-12-07T06:41:16.302Z"
+  },
+  {
+    "id": "f66ac0a4-5c6f-4f04-817f-0a6f061fff25",
+    "userId": "d791f6a1-7341-4026-ac29-ba7428a63841",
+    "message": "New resource Algorithms - Lecture 1 added to Algorithms - Lecture 1",
+    "createdAt": "2025-12-07T06:41:16.302Z"
+  },
+  {
+    "id": "b515b452-76a4-4c6b-aefa-54c42a0652ae",
+    "userId": "39aad36f-19af-42ca-bd15-242f46ac4359",
+    "message": "New resource Algorithms - Lecture 1 Recording added to Algorithms - Lecture 1",
+    "createdAt": "2025-12-07T06:43:22.043Z"
+  },
+  {
+    "id": "240c6997-2054-4f40-bde2-9eb0eb2433db",
+    "userId": "d791f6a1-7341-4026-ac29-ba7428a63841",
+    "message": "New resource Algorithms - Lecture 1 Recording added to Algorithms - Lecture 1",
+    "createdAt": "2025-12-07T06:43:22.043Z"
+  },
+  {
+    "id": "82ad1a13-c285-4239-a3c3-8048f1d47442",
+    "userId": "c13602b3-7fa0-4788-a2cd-8d6edca4f45c",
+    "message": "New resource Calculus - Problem Solving added to Calculus - Problem Solving",
+    "createdAt": "2025-12-07T06:44:57.690Z"
+  },
+  {
+    "id": "8a4309e9-6ca3-443c-bf15-8e27522b4a7c",
+    "userId": "086866d2-b49b-4f56-b813-2674c8e649f1",
+    "message": "New resource Databases - Recap Slides added to Databases - Lecture Recap",
+    "createdAt": "2025-12-07T06:49:04.190Z"
+  },
+  {
+    "id": "716444bd-3f91-409b-93f7-deab8d6e14eb",
+    "userId": "bf615b50-aea3-4144-b4ff-a72a9aa9b955",
+    "message": "New resource Algorithms - Practice Problems (zip) added to Algorithms - Practice Session",
+    "createdAt": "2025-12-07T06:50:34.712Z"
+  }
+]
