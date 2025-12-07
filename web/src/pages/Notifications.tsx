@@ -29,7 +29,7 @@ export default function Notifications(){
       )}
       {notes.length > 0 && (
         <ul className="space-y-2 mt-3">
-          {notes.map(n=> (
+          {notes.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map(n=> (
             <li key={n.id} className="card">
               <div className="text-sm">{n.message}</div>
               {n.createdAt && <div className="text-xs muted mt-1">{new Date(n.createdAt).toLocaleString()}</div>}
