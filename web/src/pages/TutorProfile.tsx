@@ -345,7 +345,7 @@ export default function TutorProfile(){
         )}
 
         <div className="mt-4 space-y-2">
-          {(tutor.sessions||[]).map((s:any)=> (
+          {(tutor.sessions||[]).sort((a:any, b:any) => new Date(b.start).getTime() - new Date(a.start).getTime()).map((s:any)=> (
             <div key={s.id} className="p-3 bg-white rounded shadow">
               <div className="flex flex-col md:flex-row md:justify-between">
                 <div>
