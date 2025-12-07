@@ -16,7 +16,7 @@ export default function Bookmarks(){
     <div>
       <h1 className="page-title">My Bookmarks</h1>
       <div className="space-y-3">
-        {items.length === 0 ? <div className="muted">No bookmarks yet</div> : items.map(it=> (
+        {items.length === 0 ? <div className="muted">No bookmarks yet</div> : items.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).map(it=> (
           <div key={it.id} className="card flex justify-between items-center">
             <div>
               <div className="font-semibold">{it.title}</div>
