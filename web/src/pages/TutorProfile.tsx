@@ -67,7 +67,12 @@ export default function TutorProfile(){
     try{
       const body = { tutorId: tutor.id, title, courseCode, start, end, location }
       const created = await api.post('/sessions', body)
-      setTutor((t:any)=> ({ ...t, sessions: [...(t.sessions||[]), created] }))
+      try{
+        const refreshed = await api.get(`/tutors/${tutor.id}`)
+        setTutor(refreshed)
+      }catch(_){
+        setTutor((t:any)=> ({ ...t, sessions: [...(t.sessions||[]), created] }))
+      }
       setTitle(''); setCourseCode(''); setStart(''); setEnd(''); setLocation('')
     }catch(e:any){
       setError(e?.message || 'Failed to add session')
@@ -339,6 +344,7 @@ export default function TutorProfile(){
               <div className="flex flex-col md:flex-row md:justify-between">
                 <div>
                   <div className="font-semibold">{s.title}</div>
+                  <div className="text-sm muted">{s.courseCode} — {s.location}</div>
                   <div className="text-xs muted">{new Date(s.start).toLocaleString()} - {new Date(s.end).toLocaleString()}</div>
                 </div>
                 <div className="flex items-center gap-3 mt-3 md:mt-0">

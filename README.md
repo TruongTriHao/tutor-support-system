@@ -22,7 +22,7 @@ Package manager: `yarn`.
 Install Yarn
 
 ```powershell
-npm install -g yarn
+npm install yarn
 ```
 
 Verify installation with `yarn -v`.
@@ -39,23 +39,15 @@ cd server; yarn; yarn dev
 cd web; yarn; yarn dev
 ```
 
-Open `http://localhost:5173` and login using any institutional email (e.g. `alice@student.hcmut.edu.vn`).
+Open `http://localhost:5173` and login using any institutional email:
+- For admin: admin@hcmut.edu.vn, password: admin 
+- For tutor: alice@hcmut.edu.vn, password: alice
+- For student: frank@hcmut.edu.vn, password: frank
 
 Demo script (sequence of screens)
-1. Login as `alice@student.hcmut.edu.vn` → redirects to Tutors list
+1. Login as `frank@student.hcmut.edu.vn` → redirects to Tutors list
 2. Browse Tutors -> click a Tutor -> view `TutorProfile` (shows sessions)
-3. Click a session -> `SessionPage` -> Book the session (POST /api/bookings)
-4. Mark a session as COMPLETED via API (or wait for a completed session), then submit feedback
-5. Open a session you attended (or your own tutor session) -> under "Resources for this session" view a resource -> `Open / Stream` (calls `/api/resources/:id/stream`) and bookmark stored in localStorage
+3. Click a session -> `SessionPage` -> Book the session
+4. Wait for a completed session, then submit feedback
+5. Open a session you attended -> under "Resources for this session" view a resource -> `Open / Stream`, `Download` and bookmark stored in localStorage
 6. Check Notifications (top-right) — server pushes notifications when booking/feedback/resources uploaded
-
-Acceptance criteria covered
-- UC-AUTH: `/api/auth/login` implemented and frontend stores token/user in `localStorage`.
-- UC-BROWSE: `/api/tutors` and `/api/tutors/:id` implemented; frontend pages exist.
-- UC-BOOK: `/api/bookings` implemented; booking updates session attendees and notifies tutor.
-- UC-SESSION: `/api/sessions` listing; tutors can update status via `/api/sessions/:id/status`.
-- UC-FEEDBACK: `/api/feedback` validates session COMPLETED and student attended, prevents duplicates.
-- UC-FB-SUMMARY: `/api/feedback/aggregate?tutorId=...` implemented.
-- UC-RESOURCES: session-scoped resources are supported via `/api/resources` (filterable by `sessionId`) and `/api/resources/:id/stream`. Tutors may upload files via `/api/resources/upload`. Bookmarking is stored in `localStorage`.
-- UC-LOG: `/api/logs` returns access logs for resources.
-- UC-NOTIFY: `/api/notifications` implemented; frontend polls it.

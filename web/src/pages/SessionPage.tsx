@@ -122,14 +122,16 @@ export default function SessionPage(){
   return (
     <div>
       <h2 className="page-title">{session.title}</h2>
+      <div className="text-sm muted">{session.courseCode} — {session.location}</div>
       <div className="text-sm muted">{new Date(session.start).toLocaleString()} — {new Date(session.end).toLocaleString()}</div>
       <div className="mt-1 muted">Status: {session.status}</div>
       { !isTutor && 
       <div>
-        <div className="mt-2">
-          <button onClick={book} className="btn btn-primary" aria-pressed={booked}>{booked ? 'Booked' : 'Book'}</button>
-        </div>
-
+        {(session.status !== 'COMPLETED' || booked) &&
+          <div className="mt-2">
+            <button onClick={book} className="btn btn-primary" aria-pressed={booked}>{booked ? 'Booked' : 'Book'}</button>
+          </div>
+        }
         <div className="mt-4 card">
           <h3 className="font-semibold">Submit Feedback</h3>
           <div>

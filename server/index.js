@@ -345,6 +345,7 @@ app.patch('/api/tutors/:id', async (req,res)=>{
 
 // Sessions
 app.get('/api/sessions', (req,res)=>{
+  updatePastSessions().catch(()=>{})
   const tutorId = req.query.tutorId
   if(tutorId){
     return res.json(sessions.filter(s=>s.tutorId===tutorId))
@@ -375,6 +376,7 @@ app.post('/api/sessions', async (req,res)=>{
   if (await writeBackToFile('sessions.json', sessions).ok === false) {
     return res.status(500).json({error:'Failed to update sessions'})
   }
+  updatePastSessions().catch(()=>{})
   res.json(s)
 })
 
