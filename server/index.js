@@ -84,6 +84,50 @@ setInterval(()=>{
 // helper
 function findUserByEmail(email){ return users.find(u=>u.email.toLowerCase()===email.toLowerCase()); }
 
+function validateAvailability(av){
+  if(!Array.isArray(av)) return { ok: false, message: 'availability must be an array' }
+  const timeRe = /^([01]\d|2[0-3]):([0-5]\d)$/
+  for(let i=0;i<av.length;i++){
+    const a = av[i]
+    if(typeof a !== 'object' || a === null) return { ok: false, message: `availability[${i}] must be an object` }
+    const { dayOfWeek, start_time, end_time } = a
+    if(typeof dayOfWeek !== 'number' || !Number.isInteger(dayOfWeek) || dayOfWeek < 0 || dayOfWeek > 6){
+      return { ok: false, message: `availability[${i}].dayOfWeek must be integer 0-6` }
+    }
+    if(typeof start_time !== 'string' || !timeRe.test(start_time)){
+      return { ok: false, message: `availability[${i}].start_time must be HH:MM` }
+    }
+    if(typeof end_time !== 'string' || !timeRe.test(end_time)){
+      return { ok: false, message: `availability[${i}].end_time must be HH:MM` }
+    }
+    const [sh, sm] = start_time.split(':').map(Number)
+    const [eh, em] = end_time.split(':').map(Number)
+    const smins = sh*60 + sm
+    const emins = eh*60 + em
+    if(smins >= emins) return { ok: false, message: `availability[${i}] end_time must be after start_time` }
+  }
+  return { ok: true }
+}
+
+const ALLOWED_SESSION_TYPES = ['one-on-one','group']
+function validateSessionTypes(st){
+  if(!Array.isArray(st)) return { ok: false, message: 'sessionTypes must be an array' }
+  for(let i=0;i<st.length;i++){
+    const v = st[i]
+    if(typeof v !== 'string' || !ALLOWED_SESSION_TYPES.includes(v)){
+      return { ok: false, message: `sessionTypes[${i}] must be one of: ${ALLOWED_SESSION_TYPES.join(',')}` }
+    }
+  }
+  return { ok: true }
+}
+
+function computeRatingsForTutor(tutorId){
+  const list = feedbacks.filter(f=>f.tutorId===tutorId)
+  const count = list.length
+  const avg = count ? (list.reduce((a,b)=>a+b.rating,0)/count) : 0
+  return { averageRating: Number(avg.toFixed(2)), ratingCount: count }
+}
+
 // Auth
 app.post('/api/auth/register', (req,res)=>{
   const { name, email, role, password } = req.body
@@ -101,7 +145,7 @@ app.post('/api/auth/register', (req,res)=>{
       return res.status(500).json({error:'Failed to update users'})
     }
     if (role === 'tutor') {
-      const newTutor = { id: newUser.id, name: newUser.name, email: newUser.email, expertise: [], bio: '' }
+      const newTutor = { id: newUser.id, name: newUser.name, email: newUser.email, expertise: [], bio: '', availability: [], averageRating: 0, ratingCount: 0, sessionTypes: [] }
       tutors.push(newTutor)
       if (await writeBackToFile('tutors.json', tutors).ok === false) {
         return res.status(500).json({error:'Failed to update tutors'})
@@ -180,22 +224,119 @@ app.delete('/api/users/:id', async (req,res)=>{
 
 // Tutors
 app.get('/api/tutors', (req,res)=>{
-  res.json(tutors)
+  const out = tutors.map(t=> ({ ...t, ...computeRatingsForTutor(t.id) }))
+  res.json(out)
+})
+
+app.get('/api/tutors/search', (req, res) => {
+  const q = (req.query.q || '').toString().toLowerCase()
+  const course = (req.query.course || '').toString().toLowerCase()
+  const dayOfWeek = req.query.dayOfWeek !== undefined ? parseInt(req.query.dayOfWeek, 10) : undefined
+  const sessionType = (req.query.sessionType || '').toString().toLowerCase().trim()
+  const start = (req.query.start || '').toString()
+  const end = (req.query.end || '').toString()
+  const limit = req.query.limit ? Math.max(1, parseInt(req.query.limit, 10)||10) : 10
+
+  const defaultFullDay = (typeof dayOfWeek === 'number' && !isNaN(dayOfWeek) && !start && !end)
+  const finalStart = defaultFullDay ? '00:00' : start
+  const finalEnd = defaultFullDay ? '23:59' : end
+
+  const checkAllDays = (!dayOfWeek && (start || end))
+
+  function timeToMins(t){
+    if(!t || typeof t !== 'string') return null
+    const m = t.match(/^([01]?\d|2[0-3]):([0-5]\d)$/)
+    if(!m) return null
+    return Number(m[1])*60 + Number(m[2])
+  }
+
+  const reqStart = timeToMins(finalStart)
+  const reqEnd = timeToMins(finalEnd)
+
+  let scored = tutors.map(t => {
+    let score = 0
+    const lowerName = (t.name||'').toString().toLowerCase()
+    const bio = (t.bio||'').toString().toLowerCase()
+    const expertise = Array.isArray(t.expertise) ? t.expertise.map(e=>e.toString().toLowerCase()) : []
+
+    if(q){
+      if(lowerName.includes(q)) score += 20
+      if(bio.includes(q)) score += 20
+      if(expertise.some(e=>e.includes(q))) score += 20
+    }
+
+    if(course){
+      if(expertise.includes(course)) score += 50
+      else if(expertise.some(e=>e.includes(course))) score += 20
+    }
+
+    if (sessionType && Array.isArray(t.sessionTypes)) {
+      if (t.sessionTypes.map(x=>x.toString().toLowerCase()).includes(sessionType)) {
+        score += 30
+      }
+    }
+
+    if(typeof dayOfWeek === 'number' && !isNaN(dayOfWeek) && Array.isArray(t.availability)){
+      for(const a of t.availability){
+        if(a && typeof a.dayOfWeek === 'number' && a.dayOfWeek === dayOfWeek){
+          const slotStart = timeToMins(a.start_time)
+          const slotEnd = timeToMins(a.end_time)
+          if(slotStart !== null && slotEnd !== null && reqStart !== null && reqEnd !== null){
+            if(slotStart <= reqStart && slotEnd >= reqEnd){ score += 40; break }
+            if(!(slotEnd <= reqStart || slotStart >= reqEnd)) { score += 10 }
+          }
+        }
+      }
+    }
+    else if(checkAllDays && Array.isArray(t.availability)){
+      for(const a of t.availability){
+        const slotStart = timeToMins(a.start_time)
+        const slotEnd = timeToMins(a.end_time)
+        if(slotStart !== null && slotEnd !== null && reqStart !== null && reqEnd !== null){
+          if(slotStart <= reqStart && slotEnd >= reqEnd){ score += 20; break }
+          if(!(slotEnd <= reqStart || slotStart >= reqEnd)) { score += 5 }
+        }
+      }
+    }
+
+    return { tutor: t, score }
+  })
+  let filtered = scored
+  if(q || course || typeof dayOfWeek === 'number' || reqStart !== null || reqEnd !== null || sessionType){
+    filtered = filtered.filter(s=>s.score>0)
+  }
+  filtered.sort((a,b)=>b.score - a.score)
+  res.json(filtered.slice(0, limit).map(s=> ({ ...s.tutor, ...computeRatingsForTutor(s.tutor.id), _score: s.score })))
 })
 
 app.get('/api/tutors/:id', (req,res)=>{
   const t = tutors.find(x=>x.id===req.params.id)
   if(!t) return res.status(404).json({error:'Tutor not found'})
   const avail = sessions.filter(s=>s.tutorId===t.id)
-  res.json({ ...t, sessions: avail })
+  const ratings = computeRatingsForTutor(t.id)
+  res.json({ ...t, ...ratings, sessions: avail })
 })
 
 app.patch('/api/tutors/:id', async (req,res)=>{
   const t = tutors.find(x=>x.id===req.params.id)
   if(!t) return res.status(404).json({error:'Tutor not found'})
-  const { expertise, bio } = req.body
+  const { expertise, bio, availability, sessionTypes } = req.body
   if(expertise!==undefined) t.expertise = expertise
   if(bio!==undefined) t.bio = bio
+  if(availability!==undefined){
+    const v = validateAvailability(availability)
+    if(!v.ok) return res.status(400).json({ error: v.message })
+    t.availability = availability
+  }
+  if(sessionTypes!==undefined){
+    const vs = validateSessionTypes(sessionTypes)
+    if(!vs.ok) return res.status(400).json({ error: vs.message })
+    t.sessionTypes = sessionTypes
+  }
+  const ratings = computeRatingsForTutor(t.id)
+  t.averageRating = ratings.averageRating
+  t.ratingCount = ratings.ratingCount
+  tutors = tutors.map(x=>x.id===t.id ? t : x)
   if (await writeBackToFile('tutors.json', tutors).ok === false) {
     return res.status(500).json({error:'Failed to update tutors'})
   }
@@ -328,6 +469,19 @@ app.post('/api/feedback', async (req,res)=>{
   notifications.push({ id: uuidv4(), userId: tutorId, message: `You received new feedback for session ${s.title}`, createdAt: new Date().toISOString() })
   if (await writeBackToFile('notifications.json', notifications).ok === false) {
     return res.status(500).json({error:'Failed to update notifications'})
+  }
+  try{
+    const ratings = computeRatingsForTutor(tutorId)
+    const tutorIndex = tutors.findIndex(t=>t.id===tutorId)
+    if(tutorIndex !== -1){
+      tutors[tutorIndex].averageRating = ratings.averageRating
+      tutors[tutorIndex].ratingCount = ratings.ratingCount
+      if (await writeBackToFile('tutors.json', tutors).ok === false) {
+        return res.status(500).json({error:'Failed to update tutors'});
+      }
+    }
+  }catch(e){
+    console.error('Failed to persist tutor ratings after feedback:', e)
   }
   res.json(fb)
 })
