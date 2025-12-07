@@ -56,7 +56,7 @@ export default function TutorsList(){
         }catch(err:any){
           setResults([])
         }finally{ setIsSearching(false) } }} className="space-y-2 mt-2">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-2">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-2 min-w-0">
             <input placeholder="Name or keyword" value={q} onChange={e=>setQ(e.target.value)} className="border p-2" />
             <input placeholder="Course / expertise" value={course} onChange={e=>setCourse(e.target.value)} className="border p-2" />
             <select value={dayOfWeek} onChange={e=>setDayOfWeek(e.target.value)} className="border p-2">
@@ -74,9 +74,9 @@ export default function TutorsList(){
               <option value="one-on-one">One-on-one</option>
               <option value="group">Group</option>
             </select>
-            <div className="flex gap-2">
-              <input type="time" value={start} onChange={e=>setStart(e.target.value)} className="border p-2" />
-              <input type="time" value={end} onChange={e=>setEnd(e.target.value)} className="border p-2" />
+            <div className="flex gap-2 min-w-0">
+              <input type="time" value={start} onChange={e=>setStart(e.target.value)} className="border p-2 w-full min-w-0" />
+              <input type="time" value={end} onChange={e=>setEnd(e.target.value)} className="border p-2 w-full min-w-0" />
             </div>
           </div>
           <div className="flex items-center gap-2">
