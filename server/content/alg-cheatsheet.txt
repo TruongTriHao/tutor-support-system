@@ -1,5 +1,0 @@
-Algorithms Cheatsheet
-
-- Sorting
-- Greedy
-- DP

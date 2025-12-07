@@ -1,5 +1,0 @@
-MATH101 Summary
-
-- Sets
-- Relations
-- Proof techniques

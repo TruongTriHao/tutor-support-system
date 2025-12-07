@@ -6,6 +6,8 @@ import StudentDashboard from './pages/StudentDashboard'
 import SessionPage from './pages/SessionPage'
 import ResourceDetail from './pages/ResourceDetail'
 import AdminUsers from './pages/AdminUsers'
+import AdminLogs from './pages/AdminLogs'
+import AdminTutorsPerformance from './pages/AdminTutorsPerformance'
 import Bookmarks from './pages/Bookmarks'
 import NavigationBar from './components/NavigationBar'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -27,6 +29,8 @@ export default function App(){
           <Route path="/sessions/:id" element={ <ProtectedRoute><StudentTutorRoute><SessionPage /></StudentTutorRoute></ProtectedRoute> } />
           <Route path="/resources/:id" element={ <ProtectedRoute><StudentTutorRoute><ResourceDetail /></StudentTutorRoute></ProtectedRoute> } />
           <Route path="/admin/users" element={<ProtectedRoute><AdminRoute><AdminUsers /></AdminRoute></ProtectedRoute>} />
+          <Route path="/admin/logs" element={<ProtectedRoute><AdminRoute><AdminLogs /></AdminRoute></ProtectedRoute>} />
+          <Route path="/admin/tutors-performance" element={<ProtectedRoute><AdminRoute><AdminTutorsPerformance /></AdminRoute></ProtectedRoute>} />
           <Route path="/bookmarks" element={ <ProtectedRoute><StudentTutorRoute><Bookmarks /></StudentTutorRoute></ProtectedRoute> } />
           <Route path="/notifications" element={ <ProtectedRoute><StudentTutorRoute><Notifications /></StudentTutorRoute></ProtectedRoute> } />
           <Route path="/" element={<ProtectedRoute><TutorsList /></ProtectedRoute>} />
