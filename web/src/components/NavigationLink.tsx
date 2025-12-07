@@ -17,26 +17,28 @@ export default function NavigationLink() {
     const user = JSON.parse(localStorage.getItem('user')||'null')
     if (token) {
         return (
-            <div className="space-x-4">
-                {user && user.role === 'student' && <Link to="/tutors">Tutors</Link>}
-                                {user && user.role === 'admin' && (
-                                        <>
-                                            <Link to="/admin/users">Users</Link>
-                                            <Link to="/admin/logs">Logs</Link>
-                                            <Link to="/admin/tutors-performance">Performance</Link>
-                                        </>
-                                )}
-                {user && user.role === 'student' && <Link to="/dashboard">Dashboard</Link>}
-                {user && user.role === 'tutor' && <Link to={`/tutors/${user.id}`}>Dashboard</Link>}
-                {user && (user.role === 'student' || user.role === 'tutor') && (
-                    <>
-                        <Link to="/bookmarks">Bookmarks</Link>
-                        <NotificationCenter />
-                    </>
-                )}
-                <button className="px-2 py-1 border rounded" onClick={logout}>Log out</button>
-            </div>  
+            <div className="flex items-center gap-3">
+                <nav className="flex items-center gap-3 text-sm">
+                    {(user && (user.role==='student')) && <Link className="text-gray-700 hover:text-gray-900" to="/tutors">Tutors</Link>}
+                    {user && user.role === 'student' && <Link className="text-gray-700 hover:text-gray-900" to="/dashboard">Dashboard</Link>}
+                    {user && user.role === 'tutor' && <Link className="text-gray-700 hover:text-gray-900" to={`/tutors/${user.id}`}>My Profile</Link>}
+                    {(user && (user.role === 'student' || user.role === 'tutor')) && <Link className="text-gray-700 hover:text-gray-900" to="/bookmarks">Bookmarks</Link>}
+                    {user && user.role === 'admin' && (
+                        <>
+                          <Link className="text-gray-700 hover:text-gray-900" to="/admin/users">Users</Link>
+                          <Link className="text-gray-700 hover:text-gray-900" to="/admin/logs">Logs</Link>
+                          <Link className="text-gray-700 hover:text-gray-900" to="/admin/tutors-performance">Performance</Link>
+                        </>
+                    )}
+                </nav>
+                {(user && (user.role === 'student' || user.role === 'tutor')) && <NotificationCenter />}
+                <button className="btn btn-ghost" onClick={logout}>Log out</button>
+            </div>
         );
     }
-    return null;
+    return (
+        <div>
+          <Link to="/login" className="btn btn-primary">Sign in</Link>
+        </div>
+    );
 }

@@ -14,13 +14,13 @@ export default function Bookmarks(){
 
   return (
     <div>
-      <h1 className="text-2xl mb-4">My Bookmarks</h1>
-      <div className="space-y-2">
-        {items.length === 0 ? <div>No bookmarks yet</div> : items.map(it=> (
-          <div key={it.id} className="p-3 bg-white rounded shadow flex justify-between">
+      <h1 className="page-title">My Bookmarks</h1>
+      <div className="space-y-3">
+        {items.length === 0 ? <div className="muted">No bookmarks yet</div> : items.map(it=> (
+          <div key={it.id} className="card flex justify-between items-center">
             <div>
               <div className="font-semibold">{it.title}</div>
-              <div className="text-xs">{it.courseCode} — {it.type}</div>
+              <div className="text-xs muted">{it.courseCode} — {it.type}</div>
             </div>
             <div className="flex items-center space-x-2">
               <Link to={`/resources/${it.id}`} className="text-blue-600">View</Link>
@@ -36,7 +36,7 @@ export default function Bookmarks(){
                 } catch (e) {
                   console.error('Failed to update bookmarks', e)
                 }
-              }} className="ml-2 px-2 py-1 bg-yellow-500 text-white rounded">Unbookmark</button>
+              }} className="ml-2 btn" style={{background:'#f59e0b', color:'white'}}>Unbookmark</button>
             </div>
           </div>
         ))}

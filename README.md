@@ -1,6 +1,11 @@
 # Tutor Support System
 
-This repository contains a minimal MVP for the Tutor Support System implementing the main use-cases described in the project documents.
+This repository contains an MVP for the Tutor Support System.
+
+## Requirements
+
+- Node.js v16+ (Node 18+ recommended).
+- Yarn or npm installed. The instructions use `yarn`, but you can substitute `npm install` and `npm run` where appropriate.
 
 Structure
 - `/web` - Frontend (React + Vite + TypeScript + Tailwind)

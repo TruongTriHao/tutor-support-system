@@ -121,16 +121,16 @@ export default function SessionPage(){
   if (error) return <div className="text-red-600">{error}</div>
   return (
     <div>
-      <h2 className="text-2xl">{session.title}</h2>
-      <div className="text-sm">{new Date(session.start).toLocaleString()} - {new Date(session.end).toLocaleString()}</div>
-      <div>Status: {session.status}</div>
+      <h2 className="page-title">{session.title}</h2>
+      <div className="text-sm muted">{new Date(session.start).toLocaleString()} — {new Date(session.end).toLocaleString()}</div>
+      <div className="mt-1 muted">Status: {session.status}</div>
       { !isTutor && 
       <div>
         <div className="mt-2">
-          <button onClick={book} className="px-3 py-1 bg-green-600 text-white rounded">{booked ? 'Booked' : 'Book'}</button>
+          <button onClick={book} className="btn btn-primary" aria-pressed={booked}>{booked ? 'Booked' : 'Book'}</button>
         </div>
 
-        <div className="mt-4 p-3 bg-white rounded shadow">
+        <div className="mt-4 card">
           <h3 className="font-semibold">Submit Feedback</h3>
           <div>
             <label className="block">Rating</label>
@@ -140,19 +140,19 @@ export default function SessionPage(){
             <label className="block">Comment</label>
             <textarea value={feedback.comment} onChange={e=>setFeedback({...feedback, comment: e.target.value})} className="w-full h-20 border" />
           </div>
-          <button onClick={submitFeedback} className="mt-2 px-3 py-1 bg-blue-600 text-white rounded">Submit Feedback</button>
+          <button onClick={submitFeedback} className="mt-2 btn btn-primary">Submit Feedback</button>
         </div>
       </div>
       }
 
-      <div className="mt-4 p-3 bg-white rounded shadow">
+      <div className="mt-4 card">
         <h3 className="font-semibold">Resources for this session</h3>
         {!canViewResources && (
           <div className="text-sm text-red-600">You must attend this session to view its resources.</div>
         )}
         {canViewResources && (
           <>
-            {resources.length === 0 && <div className="text-sm text-gray-600">No resources uploaded for this session.</div>}
+            {resources.length === 0 && <div className="text-sm muted">No resources uploaded for this session.</div>}
             {resources.length > 0 && (
               <ul className="mt-2 space-y-2">
                 {resources.map(r=> (
@@ -161,10 +161,10 @@ export default function SessionPage(){
                       <div className="font-medium">{r.title}</div>
                       <div className="text-sm text-gray-600">{r.courseCode}</div>
                     </div>
-                    <div>
-                        <Link to={`/resources/${r.id}`} className="text-blue-600">View</Link>
-                        {isTutor && currentUser && currentUser.id === r.tutorId && (
-                          <button onClick={async ()=>{
+                      <div>
+                          <Link to={`/resources/${r.id}`} className="text-blue-600">View</Link>
+                          {isTutor && currentUser && currentUser.id === r.tutorId && (
+                            <button onClick={async ()=>{
                             const ok = window.confirm('Delete this resource? This cannot be undone.')
                             if(!ok) return
                             try{
@@ -174,7 +174,7 @@ export default function SessionPage(){
                             }catch(e:any){
                               alert('Failed to delete resource: ' + (e?.message || ''))
                             }
-                          }} className="ml-2 px-2 py-1 bg-red-600 text-white rounded">Delete</button>
+                            }} className="ml-2 btn" style={{background:'#ef4444', color:'white'}}>Delete</button>
                         )}
                     </div>
                   </li>
@@ -182,8 +182,8 @@ export default function SessionPage(){
               </ul>
             )}
             {isTutor && (
-              <div className="mt-4">
-                <div className="p-4 bg-indigo-50 border border-indigo-200 rounded-lg shadow-sm">
+                <div className="mt-4">
+                  <div className="p-4 bg-indigo-50 border border-indigo-200 rounded-lg shadow-sm">
                   <div className="flex items-center justify-between">
                     <div>
                       <h4 className="font-semibold text-indigo-700">Upload Resource</h4>
@@ -201,7 +201,7 @@ export default function SessionPage(){
                       <input type="file" onChange={e=>setNewFile(e.target.files?.[0]||null)} className="mt-1" />
                     </div>
                     <div className="flex items-center space-x-2">
-                      <button onClick={uploadResource} disabled={isUploading} className="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700">{isUploading ? 'Uploading...' : 'Upload'}</button>
+                      <button onClick={uploadResource} disabled={isUploading} className="btn btn-primary">{isUploading ? 'Uploading...' : 'Upload'}</button>
                     </div>
                   </div>
                 </div>
@@ -213,10 +213,10 @@ export default function SessionPage(){
 
       {/* Attendees (visible to tutor) */}
       {isTutor && (
-        <div className="mt-4 p-3 bg-white rounded shadow">
+        <div className="mt-4 card">
           <h3 className="font-semibold">Attendees</h3>
           {attendeesDetails.length === 0 ? (
-            <div className="text-sm text-gray-600 mt-2">No attendees for this session.</div>
+            <div className="text-sm muted mt-2">No attendees for this session.</div>
           ) : (
             <ul className="mt-2 space-y-2">
               {attendeesDetails.map(a=> (
@@ -232,9 +232,9 @@ export default function SessionPage(){
 
       {/* Feedback for tutor to review */}
       {isTutor && (
-        <div className="mt-4 p-3 bg-white rounded shadow">
+        <div className="mt-4 card">
           <h3 className="font-semibold">Feedback for this session</h3>
-          {sessionFeedback.length === 0 && <div className="text-sm text-gray-600 mt-2">No feedback yet.</div>}
+          {sessionFeedback.length === 0 && <div className="text-sm muted mt-2">No feedback yet.</div>}
           {sessionFeedback.map(f=>{
             return (
               <div key={f.id} className="mt-3 border-t pt-2">

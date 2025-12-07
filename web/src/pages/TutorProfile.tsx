@@ -60,41 +60,24 @@ export default function TutorProfile(){
   async function handleAddSession(e:any){
     e.preventDefault()
     setError(null)
-    if(!isOwner){
-      setError('Only the tutor may add sessions for this profile')
-      return
-    }
-    if(!title || !courseCode || !start || !end || !location){
-      setError('Please fill required fields')
-      return
-    }
-    if(new Date(start) >= new Date(end)){
-      setError('Start time must be before end time')
-      return
-    }
+    if(!isOwner){ setError('Only the tutor may add sessions for this profile'); return }
+    if(!title || !courseCode || !start || !end || !location){ setError('Please fill required fields'); return }
+    if(new Date(start) >= new Date(end)){ setError('Start time must be before end time'); return }
     setIsSubmitting(true)
     try{
       const body = { tutorId: tutor.id, title, courseCode, start, end, location }
       const created = await api.post('/sessions', body)
       setTutor((t:any)=> ({ ...t, sessions: [...(t.sessions||[]), created] }))
-      setTitle('')
-      setCourseCode('')
-      setStart('')
-      setEnd('')
-      setLocation('')
+      setTitle(''); setCourseCode(''); setStart(''); setEnd(''); setLocation('')
     }catch(e:any){
-      setError(e?.message || 'Failed to create session')
+      setError(e?.message || 'Failed to add session')
     }finally{
       setIsSubmitting(false)
     }
   }
 
   async function handleDeleteSession(sessionId:string){
-    setError(null)
-    if(!isOwner){
-      setError('Only the tutor may remove sessions')
-      return
-    }
+    if(!isOwner) return setError('Only the tutor may delete sessions')
     if(!confirm('Delete this session?')) return
     try{
       await api.delete(`/sessions/${sessionId}`)
@@ -201,9 +184,9 @@ export default function TutorProfile(){
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-semibold">{tutor.name}</h2>
-          <p className="text-sm text-gray-600">{tutor.email}</p>
-          <p className="mt-3 text-sm text-gray-800">{tutor.bio}</p>
+          <h2 className="page-title">{tutor.name}</h2>
+          <p className="text-sm muted">{tutor.email}</p>
+          <p className="mt-3 text-sm">{tutor.bio}</p>
         </div>
         <div className="flex flex-col items-start md:items-end gap-2">
           <div className="text-sm">Rating: <strong>{typeof tutor.averageRating === 'number' ? tutor.averageRating : (tutor.averageRating ?? 0)}</strong> <span className="text-xs text-gray-500">({tutor.ratingCount ?? 0})</span></div>
@@ -215,7 +198,7 @@ export default function TutorProfile(){
       {/* Owner controls */}
       {isOwner && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="p-4 bg-gray-50 rounded">
+          <div className="card">
             <h3 className="font-semibold">Edit Profile</h3>
             <div className="mt-2 space-y-2">
               <div>
@@ -228,12 +211,12 @@ export default function TutorProfile(){
                 <div className="text-xs text-gray-500 mt-1">Separate topics with commas; these will be shown on your profile.</div>
               </div>
               <div>
-                <button className="bg-blue-600 text-white px-3 py-1 rounded" onClick={handleSaveProfile} disabled={isSavingProfile}>{isSavingProfile ? 'Saving...' : 'Save Profile'}</button>
+                <button className="btn btn-primary" onClick={handleSaveProfile} disabled={isSavingProfile}>{isSavingProfile ? 'Saving...' : 'Save Profile'}</button>
               </div>
             </div>
           </div>
 
-          <div className="p-4 bg-gray-50 rounded">
+          <div className="card">
             <h3 className="font-semibold">Session Types</h3>
             <div className="mt-2 text-sm">
               <div className="flex items-center gap-4">
@@ -247,7 +230,7 @@ export default function TutorProfile(){
                 </label>
               </div>
               <div className="mt-3">
-                <button className="bg-blue-600 text-white px-3 py-1 rounded" onClick={handleSaveSessionTypes} disabled={isSavingTypes}>{isSavingTypes ? 'Saving...' : 'Save Types'}</button>
+                <button className="btn btn-primary" onClick={handleSaveSessionTypes} disabled={isSavingTypes}>{isSavingTypes ? 'Saving...' : 'Save Types'}</button>
               </div>
             </div>
           </div>
@@ -258,27 +241,33 @@ export default function TutorProfile(){
       <section>
         <h3 className="font-semibold">Availability</h3>
         <div className="mt-2">
-          <div className="overflow-x-auto">
-            <div className="grid grid-cols-7 gap-1 text-xs text-center min-w-[960px]">
+          <div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2 text-xs text-center">
               {['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map((d)=> (
                 <div key={d} className="font-medium p-1">{d}</div>
               ))}
             </div>
-            <div className="grid grid-cols-7 gap-2 text-sm mt-2 min-w-[960px]">
+            <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-7 gap-3 text-sm mt-2">
               {[0,1,2,3,4,5,6].map(day=> (
-                <div key={day} className="min-h-[56px] border rounded p-2 bg-white" onClick={()=>{ setAvailDay(day); setTimeout(()=>{ availStartRef.current?.focus() }, 0) }}>
-                  <div className="flex flex-col items-start gap-1">
-                    {(Array.isArray(tutor.availability) ? tutor.availability.filter((a:any)=>a.dayOfWeek===day) : []).map((a:any, idx:number)=>{
-                      const globalIdx = (tutor.availability||[]).findIndex((x:any)=>x.dayOfWeek===a.dayOfWeek && x.start_time===a.start_time && x.end_time===a.end_time)
-                      return (
-                        <div key={idx} className="w-full inline-flex items-center gap-2 bg-blue-50 rounded px-3 py-1 text-sm">
-                          <div className="whitespace-nowrap">{a.start_time} - {a.end_time}</div>
-                          {isOwner ? (
-                            <button onClick={(e)=>{ e.stopPropagation(); handleRemoveAvailability(globalIdx) }} className="text-red-600 text-xs" disabled={isSavingAvail} aria-label="Remove availability">✕</button>
-                          ) : null}
-                        </div>
-                      )
-                    })}
+                <div key={day} className="min-h-[64px] border rounded p-2 bg-white" onClick={()=>{ setAvailDay(day); setTimeout(()=>{ availStartRef.current?.focus() }, 0) }}>
+                  <div className="flex flex-col items-start gap-2">
+                    {(Array.isArray(tutor.availability) ? tutor.availability.filter((a:any)=>a.dayOfWeek===day) : []).length === 0 ? (
+                      <div className="text-xs muted">No slots</div>
+                    ) : (
+                      <div className="flex flex-col gap-2 w-full">
+                        {(Array.isArray(tutor.availability) ? tutor.availability.filter((a:any)=>a.dayOfWeek===day) : []).map((a:any, idx:number)=>{
+                          const globalIdx = (tutor.availability||[]).findIndex((x:any)=>x.dayOfWeek===a.dayOfWeek && x.start_time===a.start_time && x.end_time===a.end_time)
+                          return (
+                            <div key={idx} className="flex items-center justify-between w-full bg-blue-50 rounded px-3 py-1 text-sm">
+                              <div className="whitespace-nowrap">{a.start_time} - {a.end_time}</div>
+                              {isOwner ? (
+                                <button onClick={(e)=>{ e.stopPropagation(); handleRemoveAvailability(globalIdx) }} className="text-red-600 text-xs" disabled={isSavingAvail} aria-label="Remove availability">✕</button>
+                              ) : null}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -287,13 +276,13 @@ export default function TutorProfile(){
           {(!Array.isArray(tutor.availability) || tutor.availability.length===0) && (
             <div className="text-sm text-gray-500 mt-2">No availability set</div>
           )}
-          {isOwner && <div className="text-xs text-gray-500 mt-2">Click a day to prefill the add-availability form.</div>}
+          {isOwner && <div className="text-xs muted mt-2">Click a day to prefill the add-availability form.</div>}
         </div>
       </section>
 
       {/* Edit Availability form (owner) */}
       {isOwner && (
-        <div className="mt-2 p-4 bg-gray-50 rounded">
+        <div className="mt-2 card">
           <h4 className="font-semibold">Add Availability</h4>
           <form onSubmit={handleAddAvailability} className="space-y-2 mt-2">
             <div className="flex gap-2 items-center">
@@ -311,7 +300,7 @@ export default function TutorProfile(){
               <input ref={availEndRef} type="time" value={availEnd} onChange={e=>setAvailEnd(e.target.value)} onKeyDown={e=>{ if(e.key==='Enter'){ e.preventDefault(); availSubmitRef.current?.focus(); } }} className="border p-2" />
             </div>
             <div>
-              <button ref={availSubmitRef} className="bg-green-600 text-white px-3 py-1 rounded" type="submit" disabled={isSavingAvail}>{isSavingAvail ? 'Saving...' : 'Add Availability'}</button>
+              <button ref={availSubmitRef} className="btn" style={{background:'#16a34a', color:'white'}} type="submit" disabled={isSavingAvail}>{isSavingAvail ? 'Saving...' : 'Add Availability'}</button>
             </div>
           </form>
         </div>
@@ -321,7 +310,7 @@ export default function TutorProfile(){
       <section>
         <h3 className="font-semibold">Sessions</h3>
         {isOwner && (
-          <div className="mt-3 p-4 bg-gray-50 rounded">
+          <div className="mt-3 card">
             <h4 className="font-medium">Create Session</h4>
             <form onSubmit={handleAddSession} className="space-y-2 mt-2">
               <div>
@@ -338,7 +327,7 @@ export default function TutorProfile(){
                 <input className="border p-2 w-full" placeholder="Location" value={location} onChange={e=>setLocation(e.target.value)} />
               </div>
               <div>
-                <button className="bg-blue-600 text-white px-3 py-1 rounded" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Creating...' : 'Create Session'}</button>
+                <button className="btn btn-primary" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Creating...' : 'Create Session'}</button>
               </div>
             </form>
           </div>
@@ -346,11 +335,11 @@ export default function TutorProfile(){
 
         <div className="mt-4 space-y-2">
           {(tutor.sessions||[]).sort((a:any, b:any) => new Date(b.start).getTime() - new Date(a.start).getTime()).map((s:any)=> (
-            <div key={s.id} className="p-3 bg-white rounded shadow">
+            <div key={s.id} className="card">
               <div className="flex flex-col md:flex-row md:justify-between">
                 <div>
                   <div className="font-semibold">{s.title}</div>
-                  <div className="text-xs text-gray-600">{new Date(s.start).toLocaleString()} - {new Date(s.end).toLocaleString()}</div>
+                  <div className="text-xs muted">{new Date(s.start).toLocaleString()} - {new Date(s.end).toLocaleString()}</div>
                 </div>
                 <div className="flex items-center gap-3 mt-3 md:mt-0">
                   <Link className="text-blue-600" to={`/sessions/${s.id}`}>View</Link>
@@ -359,7 +348,7 @@ export default function TutorProfile(){
                   )}
                 </div>
               </div>
-              <div className="text-xs text-gray-500 mt-1">Status: {s.status}</div>
+              <div className="text-xs muted mt-1">Status: {s.status}</div>
             </div>
           ))}
         </div>

@@ -19,12 +19,12 @@ export default function Login(){
   }
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-white rounded shadow">
-      <h2 className="text-xl font-semibold mb-2">Login</h2>
+    <div className="max-w-md mx-auto p-6 card">
+      <h2 className="page-title">Login</h2>
       <form onSubmit={submit}>
         <input className="w-full p-2 border mb-2" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} />
         <input className="w-full p-2 border mb-2" type="password" placeholder="Password" value={password} onChange={e=>setPassword(e.target.value)} />
-        <button className="px-4 py-2 bg-blue-600 text-white rounded">Login</button>
+        <button className="btn btn-primary">Login</button>
         { err && <div className="text-red-600 mt-2">{err}</div> }
       </form>
     </div>

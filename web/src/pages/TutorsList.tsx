@@ -32,14 +32,14 @@ export default function TutorsList(){
   }
   if (list.length === 0) {
     return <div>
-      <h1 className="text-2xl mb-4">Tutors</h1>
+      <h1 className="page-title">Tutors</h1>
       <p>No tutors found.</p>
     </div>
   }
   return (
     <div>
-      <h1 className="text-2xl mb-4">Tutors</h1>
-      <div className="mb-4 p-4 bg-white rounded shadow">
+      <h1 className="page-title">Tutors</h1>
+      <div className="mb-4 card">
         <h3 className="font-semibold">Find Tutors</h3>
         <form onSubmit={async e=>{ e.preventDefault(); setIsSearching(true); setResults(null); try{
           const params = new URLSearchParams()
@@ -80,8 +80,8 @@ export default function TutorsList(){
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <button className="bg-blue-600 text-white px-3 py-1 rounded" type="submit" disabled={isSearching}>{isSearching ? 'Searching...' : 'Search'}</button>
-            <button type="button" className="bg-gray-200 text-gray-800 px-3 py-1 rounded" onClick={clearFilters}>Clear</button>
+            <button className="btn btn-primary" type="submit" disabled={isSearching}>{isSearching ? 'Searching...' : 'Search'}</button>
+            <button type="button" className="btn" onClick={clearFilters}>Clear</button>
           </div>
         </form>
       </div>
@@ -91,7 +91,7 @@ export default function TutorsList(){
           {results.length === 0 ? <div className="text-sm text-gray-500">No tutors match your criteria.</div> : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
               {results.map(t=> (
-                <div key={t.id} className="p-4 bg-white rounded shadow">
+                <div key={t.id} className="card">
                   <h3 className="text-lg font-semibold">{t.name}</h3>
                   <p className="text-sm">{t.bio}</p>
                   <div className="flex gap-3 items-center">
@@ -108,7 +108,7 @@ export default function TutorsList(){
       ) : null }
       {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {list.map(t=> (
-          <div key={t.id} className="p-4 bg-white rounded shadow">
+          <div key={t.id} className="card">
             <h3 className="text-lg font-semibold">{t.name}</h3>
             <p className="text-sm">{t.bio}</p>
             <p className="text-xs">Expertise: {t.expertise.join(', ')}</p>

@@ -51,9 +51,9 @@ export default function AdminUsers(){
 
   return (
     <div className="max-w-3xl">
-      <h2 className="text-2xl mb-4">Admin — Users</h2>
+      <h2 className="page-title">Admin — Users</h2>
 
-      <div className="mb-6 p-4 bg-white rounded shadow">
+      <div className="mb-6 card">
         <h3 className="font-semibold">Register New User</h3>
         <div className="grid grid-cols-1 gap-2 mt-3">
           <input placeholder="Name" value={name} onChange={e=>setName(e.target.value)} className="border p-2" />
@@ -65,14 +65,14 @@ export default function AdminUsers(){
           </select>
           <input placeholder="Password" type="password" value={password} onChange={e=>setPassword(e.target.value)} className="border p-2" />
           <div>
-            <button onClick={register} className="px-3 py-1 bg-green-600 text-white rounded">Register</button>
+            <button onClick={register} className="btn btn-primary">Register</button>
           </div>
         </div>
       </div>
 
       <div className="space-y-6">
         {['admin','tutor','student'].map((r:any)=> (
-          <div key={r} className="p-4 bg-white rounded shadow">
+          <div key={r} className="card">
             <h4 className="font-semibold">{r.charAt(0).toUpperCase()+r.slice(1)}s ({(grouped[r]||[]).length})</h4>
             <ul className="mt-3 space-y-2">
               {(grouped[r]||[]).map((u:any)=> (
@@ -82,7 +82,7 @@ export default function AdminUsers(){
                     <div className="text-xs text-gray-600">{u.email} — {u.id}</div>
                   </div>
                   <div>
-                    <button onClick={()=>remove(u.id)} className="px-2 py-1 bg-red-600 text-white rounded">Delete</button>
+                    <button onClick={()=>remove(u.id)} className="btn" style={{background:'#ef4444', color:'white'}}>Delete</button>
                   </div>
                 </li>
               ))}

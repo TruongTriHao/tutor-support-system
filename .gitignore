@@ -39,14 +39,11 @@ Thumbs.db
 *.tgz
 *.log
 
-# Server content/temp
-cnpm/server/content/*.log
-
 # Server data folder
 server/data/*.json
 
 # Server content folder
-server/content/
+server/content/*
 
 # Ignore local npm lock backups
 package-lock.json*

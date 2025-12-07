@@ -2,4 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
-body { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue'; }
+:root{
+	--brand: #0b5fff;
+	--muted: #6b7280;
+	--bg: #f8fafc;
+	--card-bg: #ffffff;
+}
+
+@layer base{
+	body { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue'; background-color: var(--bg); }
+	.page-title{ @apply text-2xl font-semibold text-gray-900 mb-4 }
+}
+
+@layer components{
+	.app-container{ @apply max-w-6xl mx-auto px-4 }
+	.card{ background-color: var(--card-bg); @apply rounded-lg shadow px-6 py-5 }
+	.muted{ color: var(--muted) }
+	.btn{ @apply inline-flex items-center justify-center px-3 py-1.5 rounded-md border text-sm }
+	.btn-primary{ background: var(--brand); color: white; border-color: transparent; @apply hover:opacity-95 }
+	.btn-ghost{ @apply bg-transparent border-transparent text-gray-700 hover:text-gray-900 }
+}

@@ -18,21 +18,21 @@ export default function Notifications(){
 
   return (
     <div>
-      <h1 className="text-xl font-semibold mb-4">Notifications</h1>
+      <h1 className="page-title">Notifications</h1>
       {notes.length === 0 ? (
-        <p className="text-gray-600">You have no notifications.</p>
+        <p className="muted">You have no notifications.</p>
       ) : (
-        <button className="mb-4 px-3 py-1 bg-blue-600 text-white rounded" onClick={async ()=>{
+        <button className="btn" onClick={async ()=>{
           await api.post('/notifications/clear', { userId: user.id })
           setNotes([])
         }}>Mark all as read</button>
       )}
       {notes.length > 0 && (
-        <ul className="space-y-2">
+        <ul className="space-y-2 mt-3">
           {notes.map(n=> (
-            <li key={n.id} className="p-3 border rounded bg-white">
+            <li key={n.id} className="card">
               <div className="text-sm">{n.message}</div>
-              {n.createdAt && <div className="text-xs text-gray-500 mt-1">{new Date(n.createdAt).toLocaleString()}</div>}
+              {n.createdAt && <div className="text-xs muted mt-1">{new Date(n.createdAt).toLocaleString()}</div>}
             </li>
           ))}
         </ul>

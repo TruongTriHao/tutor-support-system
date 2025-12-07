@@ -23,10 +23,12 @@ export default function NotificationCenter(){
     <div className="inline-block">
       <button
         onClick={()=> navigate('/notifications')}
-        className="px-2 py-1 border rounded"
+        className="btn px-3 py-1 border rounded bg-white shadow-sm"
         aria-label="Open notifications"
+        title={`You have ${notes.length} notifications`}
       >
-        Notifications ({notes.length})
+        <span className="mr-2">🔔</span>
+        <span className="text-sm">{notes.length}</span>
       </button>
     </div>
   )

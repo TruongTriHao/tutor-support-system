@@ -117,12 +117,13 @@ async function downloadResource(){
   if(!res) return <div className="text-red-600">Error: Resource not found</div>
   return (
     <div className="max-w-2xl">
-      <h2 className="text-2xl">{res.title}</h2>
-      <div className="text-sm">Course: {res.courseCode}</div>
-      <div className="mt-4">
-        <button onClick={stream} className="px-3 py-1 bg-blue-600 text-white rounded">{(content || streamingUrl) ? 'Close' : 'Open / Stream'}</button>
-        <button onClick={downloadResource} className="ml-2 px-3 py-1 bg-green-600 text-white rounded">Download</button>
-        <button onClick={()=>{
+      <div className="card">
+        <h2 className="page-title">{res.title}</h2>
+        <div className="text-sm muted">Course: {res.courseCode}</div>
+        <div className="mt-4">
+          <button onClick={stream} className="btn btn-primary">{(content || streamingUrl) ? 'Close' : 'Open / Stream'}</button>
+          <button onClick={downloadResource} className="ml-2 btn" style={{background:'#16a34a', color:'white'}}>Download</button>
+          <button onClick={()=>{
           const b = JSON.parse(localStorage.getItem('bookmarks')||'[]')
           if(!b.includes(id)){
             b.push(id)
@@ -134,39 +135,40 @@ async function downloadResource(){
           }
           localStorage.setItem('bookmarks', JSON.stringify(b))
           setBookmarked(!bookmarked)
-        }} className="ml-2 px-3 py-1 bg-yellow-600 text-white rounded">{bookmarked ? 'Bookmarked' : 'Bookmark'}</button>
-      </div>
-      {content && <pre className="mt-4 bg-white p-3 rounded whitespace-pre-wrap">{content}</pre>}
-
-      {streamingUrl && streamingMime && (
-        <div className="mt-4 bg-white p-3 rounded">
-          {/* PDF */}
-          {streamingMime.includes('pdf') && (
-            <iframe src={streamingUrl} title="resource-pdf" className="w-full h-96" />
-          )}
-          {/* Images */}
-          {streamingMime.startsWith('image/') && (
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            <img src={streamingUrl} alt={res?.title || 'resource-image'} className="max-w-full h-auto" />
-          )}
-          {/* Video */}
-          {streamingMime.startsWith('video/') && (
-            <video controls src={streamingUrl} className="w-full" />
-          )}
-          {/* Audio */}
-          {streamingMime.startsWith('audio/') && (
-            <audio controls src={streamingUrl} className="w-full" />
-          )}
-          {/* Fallback: link to open in new tab */}
-          {(!streamingMime.includes('pdf') && !streamingMime.startsWith('image/') && !streamingMime.startsWith('video/') && !streamingMime.startsWith('audio/')) && (
-            <div>
-              <div>Preview not available for this file type.</div>
-              <a onClick={downloadResource} className="text-blue-600 underline cursor-pointer">Please download to view</a>
-            </div>
-          )}
+        }} className="ml-2 btn" style={{background:'#f59e0b', color:'white'}}>{bookmarked ? 'Bookmarked' : 'Bookmark'}</button>
         </div>
-      )}
-    </div>
-  )
-}
+        {content && <pre className="mt-4 card whitespace-pre-wrap">{content}</pre>}
+
+        {streamingUrl && streamingMime && (
+          <div className="mt-4 card">
+            {/* PDF */}
+            {streamingMime.includes('pdf') && (
+              <iframe src={streamingUrl} title="resource-pdf" className="w-full h-96" />
+            )}
+            {/* Images */}
+            {streamingMime.startsWith('image/') && (
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              <img src={streamingUrl} alt={res?.title || 'resource-image'} className="max-w-full h-auto" />
+            )}
+            {/* Video */}
+            {streamingMime.startsWith('video/') && (
+              <video controls src={streamingUrl} className="w-full" />
+            )}
+            {/* Audio */}
+            {streamingMime.startsWith('audio/') && (
+              <audio controls src={streamingUrl} className="w-full" />
+            )}
+            {/* Fallback: link to open in new tab */}
+            {(!streamingMime.includes('pdf') && !streamingMime.startsWith('image/') && !streamingMime.startsWith('video/') && !streamingMime.startsWith('audio/')) && (
+              <div>
+                <div>Preview not available for this file type.</div>
+                <a onClick={downloadResource} className="text-blue-600 underline cursor-pointer">Please download to view</a>
+              </div>
+            )}
+          </div>
+        )}
+        </div>
+      </div>
+    )
+  }

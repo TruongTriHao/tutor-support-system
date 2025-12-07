@@ -20,7 +20,7 @@ export default function App(){
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
       <NavigationBar />
-      <main className="p-4">
+      <main className="p-6 app-container">
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/tutors" element={ <ProtectedRoute><TutorsList /></ProtectedRoute> } />
