@@ -86,7 +86,7 @@ function findUserByEmail(email){ return users.find(u=>u.email.toLowerCase()===em
 
 function validateAvailability(av){
   if(!Array.isArray(av)) return { ok: false, message: 'availability must be an array' }
-  const timeRe = /^([01]\d|2[0-3]):([0-5]\d)$/
+  const timeRe = /^([01]?\d|2[0-3]):([0-5]\d)$/
   for(let i=0;i<av.length;i++){
     const a = av[i]
     if(typeof a !== 'object' || a === null) return { ok: false, message: `availability[${i}] must be an object` }
@@ -114,7 +114,7 @@ function validateSessionTypes(st){
   if(!Array.isArray(st)) return { ok: false, message: 'sessionTypes must be an array' }
   for(let i=0;i<st.length;i++){
     const v = st[i]
-    if(typeof v !== 'string' || !ALLOWED_SESSION_TYPES.includes(v)){
+    if(typeof v !== 'string' || !ALLOWED_SESSION_TYPES.includes(v.toString().toLowerCase())){
       return { ok: false, message: `sessionTypes[${i}] must be one of: ${ALLOWED_SESSION_TYPES.join(',')}` }
     }
   }
@@ -241,7 +241,7 @@ app.get('/api/tutors/search', (req, res) => {
   const finalStart = defaultFullDay ? '00:00' : start
   const finalEnd = defaultFullDay ? '23:59' : end
 
-  const checkAllDays = (!dayOfWeek && (start || end))
+  const checkAllDays = (dayOfWeek === undefined && (start || end))
 
   function timeToMins(t){
     if(!t || typeof t !== 'string') return null
@@ -517,7 +517,7 @@ app.get('/api/resources', (req,res)=>{
 app.get('/api/resources/:id/stream', async (req,res)=>{
   const r = resources.find(x=>x.id===req.params.id)
   if(!r) return res.status(404).json({error:'Resource not found'})
-  const log = { id: uuidv4(), resourceId: r.id, timestamp: new Date().toISOString() }
+  const log = { id: uuidv4(), resourceId: r.id, timestamp: new Date().toISOString(), action: 'stream' }
   logs.push(log)
   if (await writeBackToFile('logs.json', logs).ok === false) {
     return res.status(500).json({error:'Failed to update logs'})
@@ -530,10 +530,15 @@ app.get('/api/resources/:id/stream', async (req,res)=>{
   }
 })
 
-app.get('/api/resources/:id/download', (req,res)=>{
+app.get('/api/resources/:id/download', async (req,res)=>{
   const r = resources.find(x=>x.id===req.params.id)
   if(!r) return res.status(404).json({error:'Resource not found'})
   const filePath = path.join(__dirname, 'content', path.basename(r.url))
+  const log = { id: uuidv4(), resourceId: r.id, timestamp: new Date().toISOString(), action: 'download' }
+  logs.push(log)
+  if (await writeBackToFile('logs.json', logs).ok === false) {
+    return res.status(500).json({error:'Failed to update logs'})
+  }
   if(fs.existsSync(filePath)){
     res.download(filePath, r.title)
   } else {
@@ -555,6 +560,11 @@ app.post('/api/resources', async (req,res)=>{
   }
   const r = { id: uuidv4(), sessionId, tutorId, title, courseCode, type: finalType, url, createdAt: new Date().toISOString() }
   resources.push(r)
+  const log = { id: uuidv4(), resourceId: r.id, timestamp: new Date().toISOString(), action: 'add' }
+  logs.push(log)
+  if (await writeBackToFile('logs.json', logs).ok === false) {
+    return res.status(500).json({error:'Failed to update logs'})
+  }
   if (await writeBackToFile('resources.json', resources).ok === false) {
     return res.status(500).json({error:'Failed to update resources'}) 
   }
@@ -578,6 +588,11 @@ app.post('/api/resources/upload', upload.single('file'), async (req,res)=>{
   const mimeType = file.mimetype || mime.lookup(file.filename) || ''
   const r = { id: uuidv4(), sessionId, tutorId, title, courseCode, type: mimeType, url: file.filename, createdAt: new Date().toISOString() }
   resources.push(r)
+  const log = { id: uuidv4(), resourceId: r.id, timestamp: new Date().toISOString(), action: 'add' }
+  logs.push(log)
+  if (await writeBackToFile('logs.json', logs).ok === false) {
+    return res.status(500).json({error:'Failed to update logs'})
+  }
   if (await writeBackToFile('resources.json', resources).ok === false) {
     return res.status(500).json({error:'Failed to update resources'}) 
   }
@@ -599,6 +614,11 @@ app.delete('/api/resources/:id', async (req,res)=>{
   if(!requesterTutorId) return res.status(400).json({ error: 'tutorId required' })
   if(resource.tutorId !== requesterTutorId) return res.status(403).json({ error: 'Only the session tutor may delete this resource' })
   const filePath = path.join(__dirname, 'content', path.basename(resource.url))
+  const log = { id: uuidv4(), resourceId: resourceId, timestamp: new Date().toISOString(), action: 'delete' }
+  logs.push(log)
+  if (await writeBackToFile('logs.json', logs).ok === false) {
+    return res.status(500).json({error:'Failed to update logs'})
+  }
   try {
     if (fs.existsSync(filePath)) {
       await fs.promises.unlink(filePath)
@@ -624,7 +644,7 @@ app.get('/api/logs', (req,res)=>{
 app.post('/api/logs', async (req,res)=>{
   const { resourceId } = req.body
   if(!resourceId) return res.status(400).json({error:'resourceId required'})
-  const log = { id: uuidv4(), resourceId, timestamp: new Date().toISOString() }
+  const log = { id: uuidv4(), resourceId, timestamp: new Date().toISOString(), action: 'access' }
   logs.push(log)
   if (await writeBackToFile('logs.json', logs).ok === false) {
     return res.status(500).json({error:'Failed to update logs'})
